@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
                  [org.clojure/clojurescript "1.9.908"]
                  [org.clojure/core.async "0.3.443"]
-                 [reagent "0.7.0" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server]]
+                 [reagent "0.7.0" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
                  [re-frame "0.10.1"]
                  [com.andrewmcveigh/cljs-time "0.5.0"]
                  [com.taoensso/timbre "4.10.0"]
@@ -133,7 +133,8 @@
                                               ;;:source-map "app/prod/js/test.js.map"
                                               :pretty-print true
                                               :output-wrapper true}}
-                       :prod-front {:source-paths ["src_front" "src_front_profile/status_desktop_front/prod" "../status-react/src"]
+                       :prod-front {:source-paths ["src_front" "src_front_profile/status_desktop_front/prod"
+                                                   "../status-react/src"]
                                     :incremental true
                                     :jar true
                                     :assert true

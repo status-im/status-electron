@@ -13,6 +13,11 @@ You should have status-react and status-electron in the same directory
 
 ```
 
+Make simlink to resources folder 
+
+```
+ln -s /Users/*/status-dev-folder/status-react/resources /Users/*/status-dev-folder/status-electron/resources
+```
 
 ## Requirements
 
