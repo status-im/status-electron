@@ -107,6 +107,7 @@ Done, without errors.
 
 run cljsbuild `lein descjop-once`.
 
+
 ```
 $ lein descjop-once
 
@@ -120,6 +121,7 @@ Successfully compiled "app/prod/js/cljsbuild-main.js" in 19.333 seconds.
 ...
 Successfully compiled "app/prod/js/front.js" in 29.94 seconds.
 ```
+Ignore WARNINGS during front.js compilation
 
 ### step 3
 

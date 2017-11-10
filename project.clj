@@ -72,11 +72,11 @@
                                              :target :nodejs
 
                                              ;; no optimize compile (dev)
-                                             :optimizations :none
+                                             ;;:optimizations :none
                                              :output-dir "app/dev/js/out_main"
 
                                              ;; simple compile (dev)
-                                             ;;:optimizations :simple
+                                             :optimizations :simple
 
                                              ;; advanced compile (prod)
                                              ;;:optimizations :advanced
@@ -121,11 +121,11 @@
                                               :target :nodejs
 
                                               ;; no optimize compile (dev)
-                                              :optimizations :none
+                                              ;;:optimizations :none
                                               :output-dir "app/prod/js/out_main"
 
                                               ;; simple compile (dev)
-                                              ;;:optimizations :simple
+                                              :optimizations :simple
 
                                               ;; advanced compile (prod)
                                               ;;:optimizations :advanced
@@ -140,16 +140,16 @@
                                     :assert true
                                     :compiler {:output-to "app/prod/js/front.js"
                                                :externs ["app/prod/js/externs_front.js"]
-                                               :warnings true
+                                               ;;:warnings true
                                                :elide-asserts true
                                                ;; :target :nodejs
 
                                                ;; no optimize compile (dev)
-                                               :optimizations :none
+                                               ;;:optimizations :none
                                                :output-dir "app/prod/js/out_front"
 
                                                ;; simple compile (dev)
-                                               ;;:optimizations :simple
+                                               :optimizations :simple
 
                                                ;; advanced compile (prod)
                                                ;;:optimizations :advanced
