@@ -105,12 +105,6 @@ Done, without errors.
 
 ### step 2
 
-and run extern alias `descjop-externs`,
-
-```
-$ lein descjop-externs
-```
-
 run cljsbuild `lein descjop-once`.
 
 ```
@@ -129,7 +123,7 @@ Successfully compiled "app/prod/js/front.js" in 29.94 seconds.
 
 ### step 3
 
-You can run Desctop application.
+You can run Desktop application.
 
 #### development mode
 
