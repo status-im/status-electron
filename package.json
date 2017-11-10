@@ -1,0 +1,25 @@
+{
+    "name": "status-desktop",
+    "version": "0.0.0",
+    "description": "",
+    "devDependencies": {
+        "grunt": "^1.0.1",
+        "grunt-download-electron": "^2.1.4",
+        "closurecompiler-externs": "^1.0.4",
+        "electron-packager": "^8.5.1"
+    },
+    "dependencies": {
+        "react": "16.0.0",
+        "react-dom": "16.0.0",
+        "react-native-web": "0.1.12",
+        "chance": "1.0.4",
+        "eccjs": "0.3.1",
+        "homoglyph-finder": "^1.1.1",
+        "identicon.js": "github:status-im/identicon.js",
+        "awesome-phonenumber": "^1.0.13",
+        "emojilib": "^2.2.1",
+        "web3": "github:status-im/web3.js#status-develop"
+    },
+    "license": "MIT",
+    "repository": "YOUR_OWN_REPOSITORY"
+}
