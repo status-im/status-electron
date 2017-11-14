@@ -1,7 +1,7 @@
 (ns status-desktop-front.ui.components.icons
   (:require-macros [status-desktop-front.utils :refer [slurp-web-svg]])
   (:require [status-desktop-front.react-native-web :as react]
-            [status-im.components.styles :as styles]))
+            [status-im.ui.components.styles :as styles]))
 
 (def icons {:icons/chats               (slurp-web-svg "../status-react/resources/icons/bottom/chats_gray.svg")
             :icons/chats-active        (slurp-web-svg "../status-react/resources/icons/bottom/chats_active.svg")

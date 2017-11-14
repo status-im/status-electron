@@ -1,6 +1,6 @@
 (ns status-desktop-front.ui.components.tabs
   (:require [status-desktop-front.react-native-web :as react]
-            [status-im.components.tabs.styles :as tabs.styles]
+            [status-im.ui.components.tabs.styles :as tabs.styles]
             [re-frame.core :as re-frame]
             [status-desktop-front.ui.components.icons :as icons])
   (:require-macros [status-im.utils.views :as views]))

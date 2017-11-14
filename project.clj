@@ -42,9 +42,7 @@
             "descjop-figwheel" ["trampoline" "figwheel" "dev-front"]
             "descjop-once" ["do"
                             ["cljsbuild" "once" "dev-main"]
-                            ["cljsbuild" "once" "dev-front"]
-                            ["cljsbuild" "once" "prod-main"]
-                            ["cljsbuild" "once" "prod-front"]]
+                            ["cljsbuild" "once" "dev-front"]]
             "descjop-once-dev" ["do"
                                 ["cljsbuild" "once" "dev-main"]
                                 ["cljsbuild" "once" "dev-front"]]

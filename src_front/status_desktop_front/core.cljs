@@ -8,7 +8,6 @@
             status-desktop-front.ui.screens.events))
 
 (defn mount-root []
-  (println "ROOT")
   (reagent/render [chat]
                   (.getElementById js/document "app")))
 
@@ -20,9 +19,8 @@
 (defn init []
   (re-frame/dispatch-sync [:init-app-db])
   (mount-root)
-  (protocol/test-post-shh))
+  (protocol/init-whisper!))
 
 (defn init! [setting]
-  (println "RElOAD")
   (init))
   ;(enable-re-frisk-remote! {:on-init init}))
