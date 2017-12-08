@@ -27,6 +27,8 @@
 (def random-bytes           #js {})
 (def react-native
   #js {:NativeModules      #js {}
+       ;;TODO temporary using ios design for desktop, later desktop should be implemented (atm we have only ios or android)
+       :Platform           #js {:OS "ios"}
        :Animated           #js {:View #js {}
                                 :Text #js {}}
        :DeviceEventEmitter #js {:addListener (fn [])}

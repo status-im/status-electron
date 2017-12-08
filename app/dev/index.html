@@ -26,6 +26,17 @@
     <script type="text/javascript" src="js/out_front/goog/base.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/front.js" charset="utf-8"></script>
     <script type="text/javascript">goog.require('status_desktop_front.init')</script>
-
+    <script>
+      window.onload = function () {
+        status_desktop_front.init.run();
+      }
+    var oldLog = console.log;
+    (function (){
+    console.log = function (message) {
+        // DO MESSAGE HERE.
+        status_desktop_front.init.log(message);
+        oldLog.apply(console, arguments);
+    };})();
+    </script>
   </body>
 </html>

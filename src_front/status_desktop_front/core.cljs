@@ -1,26 +1,20 @@
 (ns status-desktop-front.core
-  (:require [reagent.core :as reagent :refer [atom]]
-            [re-frisk-remote.core :refer [enable-re-frisk-remote!]]
+  (:require [reagent.core :as reagent]
             [re-frame.core :as re-frame]
-            [status-desktop-front.ui.screens.chat.view :refer [chat]]
-            [status-desktop-front.protocol :as protocol]
-            status-desktop-front.ui.screens.subs
-            status-desktop-front.ui.screens.events))
+            status-im.ui.screens.subs
+            status-desktop-front.storage
+            status-desktop-front.ui.screens.events
+            [status-desktop-front.ui.screens.views :as views]))
 
 (defn mount-root []
-  (reagent/render [chat]
+  (reagent/render [views/main]
                   (.getElementById js/document "app")))
 
-(re-frame/reg-event-db :init-app-db
-                       (fn [db]
-                         ;(test-send-message!)
-                         (assoc db :view-id :chat-list :messages [{:text "At least i hope so"} {:text "That's what i thought"} {:text "a minute ago"}])))
-
 (defn init []
-  (re-frame/dispatch-sync [:init-app-db])
   (mount-root)
-  (protocol/init-whisper!))
+  (re-frame/dispatch-sync [:initialize-app]))
 
-(defn init! [setting]
-  (init))
-  ;(enable-re-frisk-remote! {:on-init init}))
+(defn log [message]
+  (re-frame/dispatch [:log-message message]))
+
+

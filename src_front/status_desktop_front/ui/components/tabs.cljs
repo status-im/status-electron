@@ -5,9 +5,11 @@
             [status-desktop-front.ui.components.icons :as icons])
   (:require-macros [status-im.utils.views :as views]))
 
+;;TODO copy-pate with minimum modifications of status-react tabs
+
 (def tabs-list-data
-  [{:view-id :wallet
-    :content {:title         "Wallet"
+  [{:view-id :profile
+    :content {:title         "Profile"
               :icon-inactive :icons/wallet
               :icon-active   :icons/wallet-active}}
    {:view-id :chat-list
@@ -38,12 +40,12 @@
 (defn tab [index content view-id active?]
   [react/touchable-highlight {:style    (tabs.styles/tab active?)
                               :disabled active?
-                              :on-press #(re-frame/dispatch [:set-view view-id])}
+                              :on-press #(re-frame/dispatch [:set :left-view-id view-id])}
    [react/view
     [content active?]]])
 
 (views/defview main-tabs []
-  (views/letsubs [current-tab [:view-id]]
+  (views/letsubs [current-tab [:get :left-view-id]]
     [react/view {:styles {:border-color :red :border-width 1}}
      [react/view {:style tabs.styles/tabs-container}
       (for [[index {:keys [content view-id]}] tabs-list-indexed]

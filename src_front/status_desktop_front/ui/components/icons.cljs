@@ -3,6 +3,8 @@
   (:require [status-desktop-front.react-native-web :as react]
             [status-im.ui.components.styles :as styles]))
 
+;;TODO it should be one place with icons for status-react and status-desktop, atm it's copy-paste
+
 (def icons {:icons/chats               (slurp-web-svg "../status-react/resources/icons/bottom/chats_gray.svg")
             :icons/chats-active        (slurp-web-svg "../status-react/resources/icons/bottom/chats_active.svg")
             :icons/contacts            (slurp-web-svg "../status-react/resources/icons/bottom/contacts_gray.svg")
