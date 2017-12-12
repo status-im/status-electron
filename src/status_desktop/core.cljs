@@ -62,10 +62,11 @@
 
 (.on ipcMain "StartNode"
      (fn start-node [event config]
-       (let [config (.GenerateConfig status-go (.resolve path (js* "__dirname") "../ethereum") 3 1)
+       (let [config (.GenerateConfig status-go (.resolve path (js* "__dirname") "../ethereum") 3 0)
              config' (.parse js/JSON config)
              _ (set! (.-LogLevel config') "INFO")
              _ (set! (.-LogFile config') (.resolve path (js* "__dirname") "../node.log"))
+             _ (set! (.-Enabled (.-UpstreamConfig config')) true)
              config'' (.stringify js/JSON config')
              res (.StartNode status-go config'')]
          (.log js/console (str "Node started at " (.resolve path (js* "__dirname") "../ethereum")))

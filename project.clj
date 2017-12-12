@@ -1,8 +1,8 @@
-(defproject status-desktop "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+(defproject status-desktop "0.0.1-SNAPSHOT"
+  :description "Status Desktop (React Native Web and Electron)"
+  :url "https://github.com/status-im/status-electron"
+  :license {:name "Mozilla Public License v2.0"
+            :url "https://github.com/status-im/status-react/blob/develop/LICENSE.md"}
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
                  [org.clojure/clojurescript "1.9.908"]
                  [org.clojure/core.async "0.3.443"]
@@ -21,41 +21,20 @@
             [lein-shell "0.5.0"]
             [lein-figwheel "0.5.14" :exclusions [org.clojure/core.cache]]]
   :source-paths ["src_tools"]
-  :aliases {"descjop-help" ["new" "descjop" "help"]
-            "descjop-version" ["new" "descjop" "version"]
-            "descjop-init" ["do"
-                            ["shell" "npm" "install"]
-                            ["shell" "grunt" "download-electron"]]
-            "descjop-init-win" ["do"
-                                ["shell" "cmd.exe" "/c" "npm" "install"]
-                                ["shell" "cmd.exe" "/c" "grunt" "download-electron"]]
-            "descjop-externs" ["do"
-                               ["externs" "dev-main" "app/dev/js/externs.js"]
-                               ["externs" "dev-front" "app/dev/js/externs_front.js"]
-                               ["externs" "prod-main" "app/prod/js/externs.js"]
-                               ["externs" "prod-front" "app/prod/js/externs_front.js"]]
-            "descjop-externs-dev" ["do"
-                                   ["externs" "dev-main" "app/dev/js/externs.js"]
-                                   ["externs" "dev-front" "app/dev/js/externs_front.js"]]
-            "descjop-externs-prod" ["do"
-                                    ["externs" "prod-main" "app/prod/js/externs.js"]
-                                    ["externs" "prod-front" "app/prod/js/externs_front.js"]]
-            "descjop-figwheel" ["trampoline" "figwheel" "dev-front"]
-            "descjop-once" ["do"
+  :aliases {"desktop-figwheel" ["trampoline" "figwheel" "dev-front"]
+            "desktop-once" ["do"
                             ["cljsbuild" "once" "dev-main"]
                             ["cljsbuild" "once" "dev-front"]]
-            "descjop-once-dev" ["do"
-                                ["cljsbuild" "once" "dev-main"]
-                                ["cljsbuild" "once" "dev-front"]]
-            "descjop-once-prod" ["do"
-                                 ["cljsbuild" "once" "prod-main"]
-                                 ["cljsbuild" "once" "prod-front"]]
+            "desktop-prod" ["do"
+                            ["cljsbuild" "once" "prod-main"]
+                            ["cljsbuild" "once" "prod-front"]]
+
             ;; electron packager for production
-            "descjop-uberapp-osx" ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=darwin" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
-            "descjop-uberapp-app-store" ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=mas" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
-            "descjop-uberapp-linux" ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=linux" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
-            "descjop-uberapp-win64" ["shell" "cmd.exe" "/c" "electron-packager" "./app/prod" "status-desktop" "--platform=win32" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
-            "descjop-uberapp-win32" ["shell" "cmd.exe" "/c" "electron-packager" "./app/prod" "status-desktop" "--platform=win32" "--arch=ia32" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]}
+            "desktop-app-osx" ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=darwin" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
+            "desktop-app-store" ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=mas" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
+            "desktop-app-linux" ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=linux" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
+            "desktop-app-win64" ["shell" "cmd.exe" "/c" "electron-packager" "./app/prod" "status-desktop" "--platform=win32" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
+            "desktop-app-win32" ["shell" "cmd.exe" "/c" "electron-packager" "./app/prod" "status-desktop" "--platform=win32" "--arch=ia32" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]}
 
   :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds {:dev-main {:source-paths ["src"]
@@ -63,9 +42,6 @@
                                   :jar true
                                   :assert true
                                   :compiler {:output-to "app/dev/js/cljsbuild-main.js"
-                                             :externs ["app/dev/js/externs.js"
-                                                       "node_modules/closurecompiler-externs/path.js"
-                                                       "node_modules/closurecompiler-externs/process.js"]
                                              :warnings true
                                              :elide-asserts true
                                              :target :nodejs
@@ -89,10 +65,8 @@
                                    :jar true
                                    :assert true
                                    :compiler {:output-to "app/dev/js/front.js"
-                                              :externs ["app/dev/js/externs_front.js"]
                                               :warnings true
                                               :elide-asserts true
-                                              ;; :target :nodejs
 
                                               ;; no optimize compile (dev)
                                               :optimizations :none
@@ -112,9 +86,6 @@
                                    :jar true
                                    :assert true
                                    :compiler {:output-to "app/prod/js/cljsbuild-main.js"
-                                              :externs ["app/prod/js/externs.js"
-                                                        "node_modules/closurecompiler-externs/path.js"
-                                                        "node_modules/closurecompiler-externs/process.js"]
                                               :warnings true
                                               :elide-asserts true
                                               :target :nodejs
@@ -137,7 +108,6 @@
                                     :jar true
                                     :assert true
                                     :compiler {:output-to "app/prod/js/front.js"
-                                               :externs ["app/prod/js/externs_front.js"]
                                                :warnings true
                                                :elide-asserts true
                                                ;; :target :nodejs

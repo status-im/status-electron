@@ -2,7 +2,8 @@
   (:require [figwheel.client :as fw :include-macros true]
             [status-desktop-front.core :as core]
             [taoensso.timbre :as log]
-            [re-frisk-remote.core :refer [enable-re-frisk-remote!]]))
+            [status-im.utils.handlers :as handlers]
+            [re-frisk-remote.core :refer [enable-re-frisk-remote! pre-event-callback]]))
 
 (enable-console-print!)
 (log/set-level! :trace)
@@ -16,7 +17,9 @@
 
 (defn ^:export run
   []
-  (enable-re-frisk-remote! {:on-init core/init}))
+  (core/init))
+  ;(handlers/add-pre-event-callback pre-event-callback)
+  ;(enable-re-frisk-remote! {:on-init core/init}))
 
 (defn ^:export log
   [message]

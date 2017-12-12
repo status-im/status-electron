@@ -87,3 +87,6 @@
   (fn [cofx [chat-id {:keys [navigation-replace?]}]]
     (when-not (= chat-id constants/console-chat-id)
       (chat.events/navigate-to-chat cofx chat-id navigation-replace?))))
+
+(handlers/register-handler :update-message-overhead! (fn [db _]
+                                                       db))

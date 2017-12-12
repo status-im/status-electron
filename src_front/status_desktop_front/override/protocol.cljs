@@ -2,7 +2,8 @@
   (:require [re-frame.core :as re-frame]
             [status-desktop-front.web3-provider :as web3-provider]
             [status-im.protocol.handlers :as protocol.handlers]
-            [status-im.constants :as constants]))
+            [status-im.constants :as constants]
+            [status-im.utils.handlers :as handlers]))
 
 ;;;; COFX
 
@@ -180,3 +181,6 @@
           messages (processed-messages/get-filtered (str "ttl > " now))
         (cache/init! messages)
         (processed-messages/delete (str "ttl <=" now)))))
+
+(handlers/register-handler-fx
+  :pending-message-upsert #())

@@ -1,15 +1,7 @@
 {
   "name": "status-desktop",
-  "version": "0.0.0",
-  "description": "",
-  "devDependencies": {
-    "closurecompiler-externs": "^1.0.4",
-    "electron-packager": "^8.5.1",
-    "electron-prebuilt": "^1.4.13",
-    "electron-rebuild": "^1.6.0",
-    "grunt": "^1.0.1",
-    "grunt-download-electron": "^2.1.4"
-  },
+  "version": "0.0.1",
+  "description": "Status Desktop (React Native Web and Electron)",
   "dependencies": {
     "react": "16.0.0",
     "react-dom": "16.0.0",
@@ -23,6 +15,6 @@
     "web3": "github:status-im/web3.js#status-develop",
     "status-nodejs": "git+https://github.com/status-im/status-nodejs.git"
   },
-  "license": "MIT",
-  "repository": "YOUR_OWN_REPOSITORY"
+  "license": "MPL-2.0",
+  "repository": "https://github.com/status-im/status-electron"
 }
