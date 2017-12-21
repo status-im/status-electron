@@ -15,6 +15,7 @@
 
 (def view (get-class "View"))
 (def text (get-class "Text"))
+(def image (get-class "Image"))
 (def touchable-highlight (get-class "TouchableOpacity"))
 (def scroll-view (get-class "ScrollView"))
 (def text-input (get-class "TextInput"))

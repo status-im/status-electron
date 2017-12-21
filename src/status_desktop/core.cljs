@@ -8,7 +8,6 @@
 (def app           (.-app electron))
 (def BrowserWindow (.-BrowserWindow electron))
 (def ipcMain       (.-ipcMain electron))
-(def Menu          (.-Menu electron))
 
 (def *win* (atom nil))
 
@@ -25,19 +24,8 @@
   ;; ready listener
   (.on app "ready"
        (fn []
-         (when (= (.-platform nodejs/process) "darwin")
-           (.setApplicationMenu Menu
-             (.buildFromTemplate Menu
-               (clj->js [{:label "Edit"
-                          :submenu [{ :role "cut"}
-                                    { :role "copy"}
-                                    { :role "paste"}
-                                    { :role "pasteandmatchstyle"}
-                                    { :role "delete"}
-                                    { :role "selectall"}
-                                    { :role "quit"}]}]))))
 
-         (reset! *win* (BrowserWindow. (clj->js {:width 1400 :height 1000 :icon (.resolve path (js* "__dirname") "../status.icns")})))
+         (reset! *win* (BrowserWindow. (clj->js {:width 800 :height 600 :icon (.resolve path (js* "__dirname") "../status.icns")})))
 
          ;; when no optimize comment out
          (.loadURL @*win* (str "file://" (.resolve path (js* "__dirname") "../index.html")))
@@ -61,7 +49,7 @@
        (set! (.-returnValue event) (.CallRPC status-go payload))))
 
 (.on ipcMain "StartNode"
-     (fn start-node [event config]
+     (fn [event config]
        (let [config (.GenerateConfig status-go (.resolve path (js* "__dirname") "../ethereum") 3 0)
              config' (.parse js/JSON config)
              _ (set! (.-LogLevel config') "INFO")
@@ -73,9 +61,13 @@
          (set! (.-returnValue event) (str "Config " config'' " Node result: " res)))))
 
 (.on ipcMain "CreateAccount"
-     (fn create-account [event password]
+     (fn [event password]
        (set! (.-returnValue event) (.CreateAccount status-go password))))
 
 (.on ipcMain "Login"
-     (fn login [event address password]
+     (fn [event address password]
        (set! (.-returnValue event) (.Login status-go address password))))
+
+(.on ipcMain "RecoverAccount"
+     (fn [event passphrase password]
+       (set! (.-returnValue event) (.RecoverAccount status-go passphrase password))))

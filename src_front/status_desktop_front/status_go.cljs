@@ -19,3 +19,6 @@
   (let [res (.sendSync ipcRenderer "Login" address password)]
     (.log js/console (str "Login result " res))
     res))
+
+(defn recover-account [passphrase password]
+  (.sendSync ipcRenderer "RecoverAccount" passphrase password))

@@ -3,7 +3,9 @@
             [status-desktop-front.status-go :as status-go]
             [status-desktop-front.storage :as storage]
             [status-im.ui.screens.accounts.events :as accounts.events]
-            [status-im.utils.types :refer [json->clj]]))
+            [status-im.ui.screens.accounts.recover.events :as recover.events]
+            [status-im.utils.types :refer [json->clj]]
+            [clojure.string :as string]))
 
 ;;;; COFX
 
@@ -24,3 +26,11 @@
   (fn [password]
     (re-frame/dispatch [::accounts.events/account-created (json->clj (status-go/create-account password)) password])))
 
+;; RECOVER FX
+
+(re-frame/reg-fx
+  ::recover.events/recover-account-fx
+  (fn [[passphrase password]]
+    (re-frame/dispatch [:account-recovered (status-go/recover-account
+                                             (string/trim passphrase)
+                                             password)])))

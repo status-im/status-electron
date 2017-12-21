@@ -29,7 +29,7 @@
    :background-color common/color-light-blue})
 
 (def sticky-button-label-style
-  {:color   common/color-white
+  {:color          common/color-white
    :font-size      17
    :line-height    20
    :letter-spacing -0.2})
@@ -39,3 +39,40 @@
    [react/view {:style sticky-button-style}
     [react/text {:style sticky-button-label-style}
      label]]])
+
+(defn button-label-style [enabled?]
+  {:color          "#4360df"
+   :font-size      15
+   :opacity        (if enabled? 1 0.3)
+   :letter-spacing -0.2})
+
+(defn button [label enabled? on-press]
+  [react/touchable-highlight {:on-press on-press :disabled (not enabled?)}
+   [react/view {:style {:width            290
+                        :height           52
+                        :align-items      :center
+                        :justify-content  :center
+                        :border-radius    8
+                        :background-color :white
+                        :box-shadow       "0 2px 6px 0 rgba(0, 0, 0, 0.25)"}}
+    [react/text {:style (button-label-style enabled?)}
+     label]]])
+
+(def text-button-label-style
+  {:color          :white
+   :height         23
+   :font-size      15
+   :letter-spacing -0.2})
+
+(defn text-button [label on-press]
+  [react/touchable-highlight {:on-press on-press}
+   [react/view
+    [react/text {:style text-button-label-style}
+     label]]])
+
+(defn back-button [on-press]
+  [react/view {:style {:position :absolute :left 32 :top 32 :z-index 1000}}
+   [react/touchable-highlight {:on-press on-press}
+    [react/view {:style {:flex-direction :row :align-items :center}}
+     [icons/icon :icons/back {:color :white}]
+     [react/text {:style {:margin-left 16 :font-size 15 :color :white}} "Back"]]]])

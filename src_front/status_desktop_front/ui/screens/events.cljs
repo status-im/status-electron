@@ -20,3 +20,8 @@
   :log-message
   (fn [db [_ message]]
      (update db :logs #(str % "\n" message))))
+
+(handlers/register-handler-db
+  :logs
+  (fn [db [_ message]]
+    (update db :logs-visible not)))
