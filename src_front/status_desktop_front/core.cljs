@@ -17,7 +17,7 @@
                   (.getElementById js/document "app")))
 
 (defn init []
-  (let [menu (.getApplicationMenu Menu)]
+  (let [menu (or (.getApplicationMenu Menu) (Menu.))]
     (.append menu
              (MenuItem.
                (clj->js {:label "Edit"
@@ -26,7 +26,8 @@
                                    { :role "paste"}
                                    { :role "pasteandmatchstyle"}
                                    { :role "delete"}
-                                   { :role "selectall"}]})))
+                                   { :role "selectall"}
+                                   { :role "quit"}]})))
     (.append menu
              (MenuItem.
                (clj->js {:label "Status" :submenu [{ :label "Logs" :click #(re-frame/dispatch [:logs]) :accelerator "CmdOrCtrl+L"}]})))
