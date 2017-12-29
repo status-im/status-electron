@@ -38,7 +38,7 @@
                           ;[:load-processed-messages]
                           [:initialize-protocol address]
                          ;[:initialize-sync-listener]
-                         ;[:initialize-chats]
+                          [:initialize-chats]
                           [:load-contacts]]
                          ;[:load-contact-groups]
                          ;[:init-discoveries]

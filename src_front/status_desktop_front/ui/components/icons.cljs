@@ -52,7 +52,11 @@
             :icons/share               (slurp-web-svg "../status-react/resources/icons/share.svg")
             :icons/tooltip-triangle    (slurp-web-svg "../status-react/resources/icons/tooltip-triangle.svg")
             :icons/open                (slurp-web-svg "../status-react/resources/icons/open.svg")
-            :icons/network             (slurp-web-svg "../status-react/resources/icons/network.svg")})
+            :icons/network             (slurp-web-svg "../status-react/resources/icons/network.svg")
+            :icons/home                (slurp-web-svg "../status-react/resources/icons/home_gray.svg")
+            :icons/home-active         (slurp-web-svg "../status-react/resources/icons/home_blue.svg")
+            :icons/profile             (slurp-web-svg "../status-react/resources/icons/profile_gray.svg")
+            :icons/profile-active      (slurp-web-svg "../status-react/resources/icons/profile_blue.svg")})
 
 (defn normalize-property-name [n]
   (if (= n :icons/options)
@@ -64,7 +68,7 @@
 (defn icon
   ([name] (icon name nil))
   ([name {:keys [color container-style style accessibility-label]
-          :or {accessibility-label :icon}}]
+          :or   {accessibility-label :icon}}]
    ^{:key name}
    [react/view
     (if-let [icon-fn (get icons (normalize-property-name name))]

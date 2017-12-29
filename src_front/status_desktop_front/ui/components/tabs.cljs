@@ -8,22 +8,19 @@
 ;;TODO copy-pate with minimum modifications of status-react tabs
 
 (def tabs-list-data
-  [{:view-id :profile
-    :content {:title         "Profile"
+  [{:view-id :chat-list
+    :content {:title         "Home"
+              :icon-inactive :icons/home
+              :icon-active   :icons/home-active}}
+   {:view-id :wallet
+    :content {:title         "Wallet"
               :icon-inactive :icons/wallet
               :icon-active   :icons/wallet-active}}
-   {:view-id :chat-list
-    :content {:title         "Chats"
-              :icon-inactive :icons/chats
-              :icon-active   :icons/chats-active}}
-   {:view-id :discover
-    :content {:title         "Discover"
-              :icon-inactive :icons/discover
-              :icon-active   :icons/discover-active}}
-   {:view-id :contact-list
-    :content {:title         "Contacts"
-              :icon-inactive :icons/contacts
-              :icon-active   :icons/contacts-active}}])
+
+   {:view-id :profile
+    :content {:title         "Profile"
+              :icon-inactive :icons/profile
+              :icon-active   :icons/profile-active}}])
 
 (defn- tab-content [{:keys [title icon-active icon-inactive]}]
   (fn [active?]

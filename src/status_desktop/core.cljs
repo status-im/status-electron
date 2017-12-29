@@ -25,7 +25,7 @@
   (.on app "ready"
        (fn []
 
-         (reset! *win* (BrowserWindow. (clj->js {:width 800 :height 600 :icon (.resolve path (js* "__dirname") "../status.icns")})))
+         (reset! *win* (BrowserWindow. (clj->js {:width 1200 :height 800 :icon (.resolve path (js* "__dirname") "../status.icns")})))
 
          ;; when no optimize comment out
          (.loadURL @*win* (str "file://" (.resolve path (js* "__dirname") "../index.html")))

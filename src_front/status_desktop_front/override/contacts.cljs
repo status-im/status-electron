@@ -2,7 +2,8 @@
   (:require [re-frame.core :as re-frame]
             [status-im.utils.js-resources :as js-res]
             [status-im.ui.screens.contacts.events :as contacts.events]
-            [status-desktop-front.storage :as storage]))
+            [status-desktop-front.storage :as storage]
+            [status-im.utils.handlers :as handlers]))
 ;;;; COFX
 
 (re-frame/reg-cofx
@@ -26,8 +27,8 @@
 
 (re-frame/reg-fx
   ::contacts.events/save-contacts!
-  (fn [new-contacts]))
-    ;(contacts/save-all new-contacts)))
+  (fn [new-contacts]
+    (storage/save-contacts new-contacts)))
 
 (re-frame/reg-fx
   ::contacts.events/delete-contact
@@ -45,3 +46,10 @@
 (re-frame/reg-fx
   ::contacts.events/request-contact-by-address
   (fn [id]))
+
+;;;; Handlers
+
+(handlers/register-handler-fx
+  :load-default-contacts!
+  (fn [cofx _]
+    cofx))

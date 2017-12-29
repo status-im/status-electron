@@ -6,24 +6,26 @@
             [status-desktop-front.ui.components.icons :as icons]
             [status-desktop-front.web3-provider :as protocol]
             [clojure.string :as string]
-            [status-im.utils.gfycat.core :as gfycat.core])
+            [status-im.utils.gfycat.core :as gfycat.core]
+            [status-im.utils.gfycat.core :as gfycat])
   (:require-macros [status-im.utils.views :as views]))
 
-(defn message [text & [me?]]
+(defn message [text me?]
   [react/view {:style {:padding-bottom 8 :padding-horizontal 60 :flex-direction :row :flex 1}}
-   (when-not me?
+   (when me?
      [react/view {:style {:flex 1}}])
    [react/view {:style {:padding 12 :background-color :white :border-radius 8}}
     [react/text
      text]]])
 
-(views/defview messages []
-  ;(views/letsubs [messages [:messages]]
+(views/defview messages [chat-id]
+  (views/letsubs [messages [:get-chat-messages chat-id]
+                  current-public-key [:get-current-public-key]]
     [react/view {:style {:flex 1 :background-color "#eef2f5"}}
      [react/scroll-view
       [react/view {:style {:padding-vertical 60}}
-       (for [[index {:keys [me? text]}] (map-indexed vector [])]
-         ^{:key index} [message text me?])]]])
+       (for [[index {:keys [from content]}] (map-indexed vector (reverse messages))]
+         ^{:key index} [message content (= from current-public-key)])]]]))
 
 (views/defview status-view []
   [react/view {:style {:flex 1 :background-color "#eef2f5" :align-items :center  :justify-content :center}}
@@ -32,6 +34,8 @@
 
 (views/defview toolbar-chat-view []
   (views/letsubs [name          [:chat :name]
+                  chat-id          [:get-current-chat-id]
+                  pending-contact? [:current-contact :pending?]
                   public-key    [:chat :public-key]]
     (let [chat-name (if (string/blank? name)
                       (gfycat.core/generate-gfy public-key)
@@ -39,22 +43,35 @@
                           "Chat name"))];(label :t/chat-name)))]
       [react/view {:style {:height 64 :align-items :center :padding-horizontal 11 :justify-content :center}}
        [react/text {:style {:font-size 16 :color :black :font-weight "600"}}
-        chat-name]])))
+        chat-name]
+       (when pending-contact?
+         [react/touchable-highlight
+          {:on-press #(re-frame/dispatch [:add-pending-contact chat-id])}
+          [react/view ;style/add-contact
+           [react/text {:style {:font-size 14 :color "#939ba1" :margin-top 3}}
+            "Add to contacts"]]])])))
        ;[react/text {:style {:font-size 14 :color "#939ba1" :margin-top 3}}
         ;"Contact status not implemented"]])))
 
 (views/defview chat-view []
-  (views/letsubs [input-text [:chat :input-text]]
+  (views/letsubs [input-text [:chat :input-text]
+                  {:keys [chat-id group-chat input-text]} [:get-current-chat]]
     [react/view {:style {:flex 1 :background-color "#eef2f5"}}
      [toolbar-chat-view]
      [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
-     [messages]
+     [messages chat-id]
      [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
                           :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
       [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16}}
        [react/view {:style {:flex 1}}
         [react/text-input {:value       (or input-text "")
                            :placeholder "Type a message..."
+                           :auto-focus true
+                           :on-key-press (fn [e]
+                                           (let [native-event (.-nativeEvent e)
+                                                 key (.-key native-event)]
+                                             (when (= key "Enter")
+                                               (re-frame/dispatch [:send-current-message]))))
                            :on-change   (fn [e]
                                           (let [native-event (.-nativeEvent e)
                                                 text (.-text native-event)]
@@ -91,9 +108,44 @@
     [react/text
      name]]])
 
+(views/defview chat-list-item-inner-view [{:keys [chat-id name color online
+                                                  group-chat contacts public?
+                                                  public-key unremovable?] :as chat}]
+  (views/letsubs [last-message [:get-last-message chat-id]]
+    (let [name (or name
+                   (gfycat/generate-gfy public-key))]
+      [react/view {:style {:padding 12 :background-color :white}}
+       [react/text
+        name]])))
+
+(defn chat-list-item [[chat-id chat]]
+  [react/touchable-highlight {:on-press #(re-frame/dispatch [:navigate-to-chat chat-id])}
+   [react/view
+    [chat-list-item-inner-view (assoc chat :chat-id chat-id)]]])
+
+(views/defview chat-list-view []
+  (views/letsubs [chats [:filtered-chats]]
+    [react/view {:style {:flex 1 :background-color :white}}
+     [react/view {:style {:height 64 :align-items :center :flex-direction :row :padding-horizontal 11}}
+      [icons/icon :icons/hamburger]
+      [react/view {:style {:flex 1 :margin-horizontal 11 :height 38 :border-radius 8 :background-color "#edf1f3"}}]
+      [react/touchable-highlight {:on-press #(re-frame/dispatch [:navigate-to :new-contact])}
+       [icons/icon :icons/add]]]
+     [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
+     [react/scroll-view
+      [react/view
+       (for [[index chat] (map-indexed vector chats)]
+         ^{:key index} [chat-list-item chat])]]]))
+
 (views/defview contacts-list-view []
   (views/letsubs [contacts [:all-added-group-contacts-filtered nil]]
     [react/view {:style {:flex 1 :background-color "#eef2f5"}}
+     [react/view {:style {:height 64 :align-items :center :flex-direction :row :padding-horizontal 11}}
+      [icons/icon :icons/hamburger]
+      [react/view {:style {:flex 1 :margin-horizontal 11 :height 38 :border-radius 8 :background-color "#edf1f3"}}]
+      [react/touchable-highlight {:on-press #(re-frame/dispatch [:navigate-to :new-contact])}
+       [icons/icon :icons/add]]]
+     [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
      [react/scroll-view
       [react/view
        (for [[index contact] (map-indexed vector contacts)]
@@ -106,6 +158,7 @@
       (let [component (case tab
                         :profile profile.views/profile
                         :contact-list contacts-list-view
+                        :chat-list chat-list-view
                         react/view)]
         [react/view {:style {:flex 1}}
          [component]]))))
@@ -124,12 +177,6 @@
 (views/defview chat []
   [react/view {:style {:flex 1 :flex-direction :row}}
    [react/view {:style {:width 340 :background-color :white}}
-    [react/view {:style {:height 64 :align-items :center :flex-direction :row :padding-horizontal 11}}
-     [icons/icon :icons/hamburger]
-     [react/view {:style {:flex 1 :margin-horizontal 11 :height 38 :border-radius 8 :background-color "#edf1f3"}}]
-     [react/touchable-highlight {:on-press #(re-frame/dispatch [:navigate-to :new-contact])}
-      [icons/icon :icons/add]]]
-    [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
     [react/view {:style {:flex 1}}
      [tab-views]]
     [main-tabs]]
