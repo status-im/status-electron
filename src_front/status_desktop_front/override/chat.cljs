@@ -5,7 +5,15 @@
             [status-im.constants :as constants]
             [status-desktop-front.storage :as storage]))
 
-;;;; Coeffects
+;;;; DESKTOP
+
+(re-frame/reg-fx
+  :send-desktop-notification
+  (fn [{:keys [content from]}]
+    (when-not (.hasFocus js/document)
+      (js/Notification. from (clj->js {:body content})))))
+
+    ;;;; Coeffects
 
 (re-frame/reg-cofx
   :stored-unviewed-messages

@@ -42,6 +42,7 @@
 
 (defview create-account []
   (letsubs [accounts [:get-accounts]
+            profile-name [:get-in [:accounts/create :name]]
             password [:get-in [:accounts/create :password]]
             password-confirm [:get-in [:accounts/create :password-confirm]]]
     [react/view {:style st/accounts-container}
@@ -57,8 +58,17 @@
        [react/view {:style st/accounts-list-container}
         [react/view {:style {:height 52 :width 290 :background-color :white
                              :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
-         [react/text-input {:value       (or password "")
+         [react/text-input {:value       (or profile-name "")
                             :auto-focus  true
+                            :style {:padding-horizontal 17}
+                            :placeholder "Name"
+                            :on-change   (fn [e]
+                                           (let [native-event (.-nativeEvent e)
+                                                 text (.-text native-event)]
+                                             (re-frame/dispatch [:set-in [:accounts/create :name] text])))}]]
+        [react/view {:style {:height 52 :width 290 :background-color :white
+                             :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
+         [react/text-input {:value       (or password "")
                             :style {:padding-horizontal 17}
                             :placeholder "Password"
                             :secure-text-entry true
@@ -84,7 +94,7 @@
         [react/view {:style {:margin-top 15}}
          [components/button
           "Create account"
-          (and (> (count password) 6) (= password password-confirm))
+          (and (not (string/blank? profile-name)) (> (count password) 6) (= password password-confirm))
           #(re-frame/dispatch [:create-desktop-account password])]]]]]
      [react/view {:style {:align-items :center :margin-bottom 32}}
       (when-not (> (count accounts) 0)
