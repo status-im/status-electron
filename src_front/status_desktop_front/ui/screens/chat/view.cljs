@@ -6,42 +6,58 @@
             [status-desktop-front.ui.components.icons :as icons]
             [status-desktop-front.web3-provider :as protocol]
             [clojure.string :as string]
+            [status-im.chat.styles.message.message :as message.style]
             [status-im.utils.gfycat.core :as gfycat.core]
             [status-im.utils.gfycat.core :as gfycat]
-            [status-im.ui.screens.chats-list.styles :as chats-list.styles])
+            [status-im.ui.screens.chats-list.styles :as chats-list.styles]
+            [status-im.constants :as constants])
   (:require-macros [status-im.utils.views :as views]))
 
+(views/defview message-author-name [{:keys [outgoing from] :as message}]
+  (views/letsubs [current-account [:get-current-account]
+                  incoming-name   [:contact-name-by-identity from]]
+    (when-let [name (if outgoing
+                      (:name current-account)
+                      (or incoming-name "Unknown contact"))]
+      [react/text {:style message.style/author} name])))
+
 (defn message [text me? {:keys [outgoing message-id chat-id message-status user-statuses
-                                from current-public-key] :as message}]
-  (reagent.core/create-class
-    {:component-did-mount
-     #(when (and message-id
-                 chat-id
-                 (not outgoing)
-                 (not= :seen message-status)
-                 (not= :seen (keyword (get-in user-statuses [current-public-key :status]))))
-        (re-frame/dispatch [:send-seen! {:chat-id    chat-id
-                                         :from       from
-                                         :message-id message-id}]))
-     :reagent-render
-     (fn []
-       [react/view {:style {:padding-bottom 8 :padding-horizontal 60 :flex-direction :row :flex 1}}
+                                from current-public-key content-type group-chat] :as message}]
+  (when (= content-type constants/text-content-type)
+    (reagent.core/create-class
+      {:component-did-mount
+       #(when (and message-id
+                   chat-id
+                   (not outgoing)
+                   (not= :seen message-status)
+                   (not= :seen (keyword (get-in user-statuses [current-public-key :status]))))
+          (re-frame/dispatch [:send-seen! {:chat-id    chat-id
+                                           :from       from
+                                           :message-id message-id}]))
+       :reagent-render
+       (fn []
+         [react/view {:style (merge {:padding-bottom 8}
+                                    (if me?
+                                      {:align-items :flex-end
+                                       :padding-left 90
+                                       :padding-right 60}
+                                      {:align-items :flex-start
+                                       :padding-left 60
+                                       :padding-right 90}))}
+          [react/view {:style {:padding 12 :background-color :white :border-radius 8}}
+           (when group-chat [message-author-name message])
+           [react/text
+            text]]])})))
 
-        (when me?
-          [react/view {:style {:flex 1}}])
-        [react/view {:style {:padding 12 :background-color :white :border-radius 8}}
-         [react/text
-          text]]])}))
-
-(views/defview messages-view [chat-id]
+(views/defview messages-view [{:keys [chat-id group-chat]}]
   (let [scroll-ref (atom nil)
         messages (re-frame/subscribe [:get-chat-messages chat-id])
         current-public-key (re-frame/subscribe [:get-current-public-key])]
     [react/view {:style {:flex 1 :background-color "#eef2f5"}}
      [react/scroll-view {:onContentSizeChange #(.scrollToEnd @scroll-ref) :ref #(reset! scroll-ref %)}
       [react/view {:style {:padding-vertical 60}}
-       (for [[index {:keys [from content] :as message-obj}] (map-indexed vector (reverse @messages))]
-         ^{:key index} [message content (= from @current-public-key) message-obj])]]]))
+       (for [[index {:keys [from content message-id] :as message-obj}] (map-indexed vector (reverse @messages))]
+         ^{:key message-id} [message content (= from @current-public-key) (assoc message-obj :group-chat group-chat)])]]]))
 
 (views/defview status-view []
   [react/view {:style {:flex 1 :background-color "#eef2f5" :align-items :center  :justify-content :center}}
@@ -76,14 +92,17 @@
     [react/view {:style {:flex 1 :background-color "#eef2f5"}}
      [toolbar-chat-view]
      [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
-     [messages-view (:chat-id current-chat)]
+     [messages-view current-chat]
      [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
                           :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
-      [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16}}
+      [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16 :flex 1 :margin-bottom 16}}
        [react/view {:style {:flex 1}}
         [react/text-input {:value       (or input-text "")
                            :placeholder "Type a message..."
                            :auto-focus true
+                           :multiline true
+                           :blur-on-submit true
+                           :style {:flex 1}
                            :ref #(reset! inp-ref %)
                            :on-key-press (fn [e]
                                            (let [native-event (.-nativeEvent e)
@@ -98,13 +117,15 @@
        [react/touchable-highlight {:on-press (fn []
                                                 (js/setTimeout #(.focus @inp-ref) 200)
                                                 (re-frame/dispatch [:send-current-message]))}
-        [react/view {:style {:margin-left     16 :width 30 :height 30 :border-radius 15 :background-color "#eef2f5" :align-items :center
+        [react/view {:style {:margin-left 16 :width 30 :height 30 :border-radius 15 :background-color "#eef2f5" :align-items :center
                              :justify-content :center}}
          [icons/icon :icons/dropdown-up]]]]]]))
 
 (views/defview new-contact []
-  (views/letsubs [new-contact-identity [:get :contacts/new-identity]]
+  (views/letsubs [new-contact-identity [:get :contacts/new-identity]
+                  topic [:get :public-group-topic]]
     [react/view {:style {:flex 1 :background-color "#eef2f5"}}
+     ^{:key "newcontact"}
      [react/view {:style {:height 64 :align-items :center :padding-horizontal 11 :justify-content :center}}
       [react/text {:style {:font-size 16 :color :black :font-weight "600"}}
        "Add new contact"]]
@@ -119,6 +140,24 @@
                                                 text (.-text native-event)]
                                             (re-frame/dispatch [:set :contacts/new-identity text])))}]]
        [react/touchable-highlight {:on-press #(re-frame/dispatch [:add-contact-handler new-contact-identity])}
+        [react/view {:style {:margin-left     16 :width 30 :height 30 :border-radius 15 :background-color "#eef2f5" :align-items :center
+                             :justify-content :center}}
+         [icons/icon :icons/ok]]]]]
+     ^{:key "publicchat"}
+     [react/view {:style {:height 64 :align-items :center :padding-horizontal 11 :justify-content :center}}
+      [react/text {:style {:font-size 16 :color :black :font-weight "600"}}
+       "Join to public chat"]]
+     [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
+     [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
+                          :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
+      [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16}}
+       [react/view {:style {:flex 1}}
+        [react/text-input {:placeholder "topic"
+                           :on-change   (fn [e]
+                                          (let [native-event (.-nativeEvent e)
+                                                text (.-text native-event)]
+                                            (re-frame/dispatch [:set :public-group-topic text])))}]]
+       [react/touchable-highlight {:on-press #(re-frame/dispatch [:create-new-public-chat topic])}
         [react/view {:style {:margin-left     16 :width 30 :height 30 :border-radius 15 :background-color "#eef2f5" :align-items :center
                              :justify-content :center}}
          [icons/icon :icons/ok]]]]]]))

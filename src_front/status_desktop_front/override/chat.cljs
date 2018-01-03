@@ -1,6 +1,7 @@
 (ns status-desktop-front.override.chat
   (:require [re-frame.core :as re-frame]
             [status-im.chat.events :as chat.events]
+            [status-im.chat.handlers :as chat.handlers]
             [status-im.utils.handlers :as handlers]
             [status-im.constants :as constants]
             [status-desktop-front.storage :as storage]))
@@ -12,6 +13,40 @@
   (fn [{:keys [content from]}]
     (when-not (.hasFocus js/document)
       (js/Notification. from (clj->js {:body content})))))
+
+;;;; old events
+
+(re-frame/reg-fx
+  ::chat.handlers/save-public-chat
+  (fn [chat]
+    (storage/save-chat chat)))
+
+
+(re-frame/reg-fx
+  ::chat.handlers/save-chat
+  (fn [new-chat]
+    (storage/save-chat new-chat)))
+
+(re-frame/reg-cofx
+  ::chat.handlers/chat-exists?
+  (fn [coeffects _]
+    (let [[{{:keys [group-id]} :payload}] (:event coeffects)]
+      (assoc coeffects :chat-exists?
+                       (storage/chat-exists? group-id)))))
+
+(re-frame/reg-cofx
+  ::chat.handlers/new-update?
+  (fn [coeffects _]
+    (let [[{{:keys [group-id timestamp]} :payload}] (:event coeffects)]
+      (assoc coeffects :new-update?
+                       (storage/chat-new-update? timestamp group-id)))))
+
+(re-frame/reg-cofx
+  ::chat.handlers/chat-is-active?
+  (fn [coeffects _]
+    (let [[{{:keys [group-id]} :payload}] (:event coeffects)]
+      (assoc coeffects :chat-is-active?
+                       (storage/chat-is-active? group-id)))))
 
     ;;;; Coeffects
 

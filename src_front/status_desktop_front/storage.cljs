@@ -44,6 +44,21 @@
 (defn get-chat-by-id [chat-id]
   (get @(:chats @account) chat-id))
 
+(defn chat-exists? [chat-id]
+  (boolean (get-chat-by-id chat-id)))
+
+(defn chat-is-active? [chat-id]
+  (get (get-chat-by-id chat-id) :is-active))
+
+(defn chat-new-update? [timestamp chat-id]
+  (let
+    [{:keys [added-to-at removed-at removed-from-at added-at]}
+     (get-chat-by-id chat-id)]
+    (and (> timestamp added-to-at)
+         (> timestamp removed-at)
+         (> timestamp removed-from-at)
+         (> timestamp added-at))))
+
 ;;;; MESSAGE
 
 (defn save-message [{:keys [message-id content] :as message}]

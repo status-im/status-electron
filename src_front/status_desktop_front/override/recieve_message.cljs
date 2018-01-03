@@ -6,7 +6,8 @@
   :pop-up-chat?
   (fn [cofx]
     (assoc cofx :pop-up-chat? (fn [chat-id]
-                                true))))
+                                (or (not (storage/chat-exists? chat-id))
+                                    (storage/chat-is-active? chat-id))))))
 
 (re-frame/reg-cofx
   :get-last-clock-value
