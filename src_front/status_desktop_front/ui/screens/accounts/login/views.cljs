@@ -39,6 +39,6 @@
                                            (re-frame/dispatch [:set-in [:accounts/login :error] ""])))}]]
       [react/view {:style {:margin-top 30}}
        [components/button
-        "Sing in"
+        "Sign in"
         (> (count password) 6)
         #(re-frame/dispatch [:login-account address password])]]]]))
