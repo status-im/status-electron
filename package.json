@@ -3,17 +3,18 @@
   "version": "0.0.1",
   "description": "Status Desktop (React Native Web and Electron)",
   "dependencies": {
-    "react": "16.0.0",
-    "react-dom": "16.0.0",
-    "react-native-web": "0.1.12",
+    "awesome-phonenumber": "^1.0.13",
     "chance": "1.0.4",
     "eccjs": "0.3.1",
+    "emojilib": "^2.2.1",
     "homoglyph-finder": "^1.1.1",
     "identicon.js": "github:status-im/identicon.js",
-    "awesome-phonenumber": "^1.0.13",
-    "emojilib": "^2.2.1",
-    "web3": "github:status-im/web3.js#status-develop",
-    "status-nodejs": "git+https://github.com/status-im/status-nodejs.git"
+    "react": "16.0.0",
+    "react-dom": "16.0.0",
+    "react-native-hyperlink": "git+https://github.com/flexsurfer/react-native-hyperlink.git",
+    "react-native-web": "0.1.12",
+    "status-nodejs": "git+https://github.com/status-im/status-nodejs.git",
+    "web3": "github:status-im/web3.js#status-develop"
   },
   "license": "MPL-2.0",
   "repository": "https://github.com/status-im/status-electron"

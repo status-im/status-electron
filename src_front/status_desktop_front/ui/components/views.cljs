@@ -4,7 +4,14 @@
     [status-desktop-front.ui.components.icons :as icons]
     [status-im.ui.components.common.styles :as styles]
     [status-im.ui.components.action-button.styles :as st]
-    [status-im.ui.components.styles :as common]))
+    [status-im.ui.components.styles :as common]
+    [status-im.ui.components.checkbox.styles :as checkbox.styles]))
+
+(defn checkbox [{:keys [on-value-change checked?]}]
+  [react/touchable-highlight {:style checkbox.styles/wrapper :on-press #(do (when on-value-change (on-value-change (not checked?))))}
+   [react/view {:style (checkbox.styles/icon-check-container checked?)}
+    (when checked?
+      [icons/icon :icons/ok {:style checkbox.styles/check-icon}])]])
 
 ;; TODO copy-pate with minimum modifications of status-react components
 

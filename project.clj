@@ -30,12 +30,12 @@
                             ["cljsbuild" "once" "prod-front"]]
 
             ;; electron packager for production
-            "desktop-app-osx"   ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=darwin" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules" "--icon=assets/icon1024.icns"]
-            "desktop-app-linux" ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=linux" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules" "--icon=assets/icon1024.png"]
+            "desktop-app-osx"   ["shell" "electron-packager" "./app/prod" "Status" "--platform=darwin" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules" "--icon=assets/icon1024.icns"]
+            "desktop-app-linux" ["shell" "electron-packager" "./app/prod" "Status" "--platform=linux" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules" "--icon=assets/icon1024.png"]
 
-            "desktop-app-store" ["shell" "electron-packager" "./app/prod" "status-desktop" "--platform=mas" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
-            "desktop-app-win64" ["shell" "cmd.exe" "/c" "electron-packager" "./app/prod" "status-desktop" "--platform=win32" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
-            "desktop-app-win32" ["shell" "cmd.exe" "/c" "electron-packager" "./app/prod" "status-desktop" "--platform=win32" "--arch=ia32" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]}
+            "desktop-app-store" ["shell" "electron-packager" "./app/prod" "Status" "--platform=mas" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
+            "desktop-app-win64" ["shell" "cmd.exe" "/c" "electron-packager" "./app/prod" "Status" "--platform=win32" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]
+            "desktop-app-win32" ["shell" "cmd.exe" "/c" "electron-packager" "./app/prod" "Status" "--platform=win32" "--arch=ia32" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules"]}
 
   :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds {:dev-main {:source-paths ["src"]

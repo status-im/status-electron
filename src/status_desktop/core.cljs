@@ -25,7 +25,7 @@
   (.on app "ready"
        (fn []
 
-         (reset! *win* (BrowserWindow. (clj->js {:width 1200 :height 800 :icon (.resolve path (js* "__dirname") "../status.icns")})))
+         (reset! *win* (BrowserWindow. (clj->js {:width 1200 :height 800})))
 
          ;; when no optimize comment out
          (.loadURL @*win* (str "file://" (.resolve path (js* "__dirname") "../index.html")))
@@ -50,14 +50,15 @@
 
 (.on ipcMain "StartNode"
      (fn [event config]
-       (let [config (.GenerateConfig status-go (.resolve path (js* "__dirname") "../ethereum") 3 0)
+       (let [app-path (.getPath app "userData")
+             config (.GenerateConfig status-go (str app-path "/ethereum") 3 0)
              config' (.parse js/JSON config)
              _ (set! (.-LogLevel config') "INFO")
-             _ (set! (.-LogFile config') (.resolve path (js* "__dirname") "../node.log"))
+             _ (set! (.-LogFile config') (str app-path "/node.log"))
              _ (set! (.-Enabled (.-UpstreamConfig config')) true)
              config'' (.stringify js/JSON config')
              res (.StartNode status-go config'')]
-         (.log js/console (str "Node started at " (.resolve path (js* "__dirname") "../ethereum")))
+         (.log js/console (str "Node started at " (str app-path "/ethereum")))
          (set! (.-returnValue event) (str "Config " config'' " Node result: " res)))))
 
 (.on ipcMain "CreateAccount"

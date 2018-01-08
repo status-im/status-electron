@@ -3,7 +3,8 @@
             [status-desktop-front.web3-provider :as web3-provider]
             [status-im.protocol.handlers :as protocol.handlers]
             [status-im.constants :as constants]
-            [status-im.utils.handlers :as handlers]))
+            [status-im.utils.handlers :as handlers]
+            [status-desktop-front.storage :as storage]))
 
 ;;;; COFX
 
@@ -15,7 +16,7 @@
 (re-frame/reg-cofx
   ::protocol.handlers/get-chat-groups
   (fn [coeffects _]
-    (assoc coeffects :groups [])))
+    (assoc coeffects :groups (storage/get-active-group-chats))))
 
 (re-frame/reg-cofx
   ::protocol.handlers/get-pending-messages

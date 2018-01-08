@@ -6,20 +6,23 @@
             [status-desktop-front.ui.components.icons :as icons]
             [status-desktop-front.web3-provider :as protocol]
             [clojure.string :as string]
+            [status-im.chat.views.message.message :as message.views]
             [status-im.chat.styles.message.message :as message.style]
             [status-im.utils.gfycat.core :as gfycat.core]
             [status-im.utils.gfycat.core :as gfycat]
             [status-im.ui.screens.chats-list.styles :as chats-list.styles]
-            [status-im.constants :as constants])
+            [status-im.constants :as constants]
+            [status-desktop-front.react-native-hyperlink :as rn-hl])
   (:require-macros [status-im.utils.views :as views]))
 
 (views/defview message-author-name [{:keys [outgoing from] :as message}]
   (views/letsubs [current-account [:get-current-account]
-                  incoming-name   [:contact-name-by-identity from]]
-    (when-let [name (if outgoing
-                      (:name current-account)
-                      (or incoming-name "Unknown contact"))]
-      [react/text {:style message.style/author} name])))
+                  incoming-name [:contact-name-by-identity from]]
+    (if outgoing
+      [react/text {:style message.style/author} (:name current-account)]
+      (let [name (or incoming-name (gfycat/generate-gfy from))]
+        [react/touchable-highlight {:on-press #(re-frame/dispatch [:show-contact-dialog from name (boolean incoming-name)])}
+         [react/text {:style message.style/author} name]]))))
 
 (defn message [text me? {:keys [outgoing message-id chat-id message-status user-statuses
                                 from current-public-key content-type group-chat] :as message}]
@@ -36,90 +39,115 @@
                                            :message-id message-id}]))
        :reagent-render
        (fn []
-         [react/view {:style (merge {:padding-bottom 8}
-                                    (if me?
-                                      {:align-items :flex-end
-                                       :padding-left 90
-                                       :padding-right 60}
-                                      {:align-items :flex-start
-                                       :padding-left 60
-                                       :padding-right 90}))}
+         [react/view {:style (merge
+                               {:padding-bottom 8}
+                               (if me?
+                                 {:align-items   :flex-end
+                                  :padding-left  90
+                                  :padding-right 60}
+                                 {:align-items   :flex-start
+                                  :padding-left  60
+                                  :padding-right 90}))}
           [react/view {:style {:padding 12 :background-color :white :border-radius 8}}
            (when group-chat [message-author-name message])
-           [react/text
-            text]]])})))
+           [rn-hl/hyperlink {:linkStyle {:color "#2980b9"} :on-press #(re-frame/dispatch [:show-link-dialog %1])}
+            [react/text
+             text]]]])})))
 
 (views/defview messages-view [{:keys [chat-id group-chat]}]
-  (let [scroll-ref (atom nil)
-        messages (re-frame/subscribe [:get-chat-messages chat-id])
-        current-public-key (re-frame/subscribe [:get-current-public-key])]
-    [react/view {:style {:flex 1 :background-color "#eef2f5"}}
-     [react/scroll-view {:onContentSizeChange #(.scrollToEnd @scroll-ref) :ref #(reset! scroll-ref %)}
-      [react/view {:style {:padding-vertical 60}}
-       (for [[index {:keys [from content message-id] :as message-obj}] (map-indexed vector (reverse @messages))]
-         ^{:key message-id} [message content (= from @current-public-key) (assoc message-obj :group-chat group-chat)])]]]))
+  (views/letsubs [chat-id* (atom nil)
+                  scroll-ref (atom nil)
+                  scroll-timer (atom nil)
+                  scroll-height (atom nil)]
+    (let [_ (when (or (not @chat-id*) (not= @chat-id* chat-id))
+              (reset! chat-id* chat-id)
+              (println "dirty hack")
+              (js/setTimeout #(when scroll-ref (.scrollToEnd @scroll-ref)) 400))
+          messages (re-frame/subscribe [:get-chat-messages chat-id])
+          current-public-key (re-frame/subscribe [:get-current-public-key])]
+      [react/view {:style {:flex 1 :background-color "#eef2f5"}}
+       [react/scroll-view {:scrollEventThrottle 16
+                           :on-scroll (fn [e]
+                                        (let [ne (.-nativeEvent e)
+                                              y (.-y (.-contentOffset ne))]
+                                          (when (zero? y)
+                                            (when @scroll-timer (js/clearTimeout @scroll-timer))
+                                            (reset! scroll-timer (js/setTimeout #(re-frame/dispatch [:load-more-messages]) 300)))
+                                          (reset! scroll-height (+ y (.-height (.-layoutMeasurement ne))))))
+                           :on-content-size-change #(when (or (not @scroll-height) (< (- %2 @scroll-height) 500))
+                                                      (.scrollToEnd @scroll-ref))
+                           :ref #(reset! scroll-ref %)}
+        [react/view {:style {:padding-vertical 60}}
+         (for [[index {:keys [from content message-id] :as message-obj}] (map-indexed vector (reverse @messages))]
+           ^{:key message-id} [message content (= from @current-public-key) (assoc message-obj :group-chat group-chat)])]]])))
 
 (views/defview status-view []
-  [react/view {:style {:flex 1 :background-color "#eef2f5" :align-items :center  :justify-content :center}}
+  [react/view {:style {:flex 1 :background-color "#eef2f5" :align-items :center :justify-content :center}}
    [react/text {:style {:font-size 18 :color "#939ba1"}}
     "Status.im"]])
 
 (views/defview toolbar-chat-view []
-  (views/letsubs [name             [:chat :name]
-                  chat-id          [:get-current-chat-id]
+  (views/letsubs [name [:chat :name]
+                  chat-id [:get-current-chat-id]
                   pending-contact? [:current-contact :pending?]
-                  public-key       [:chat :public-key]]
+                  public-key [:chat :public-key]]
     (let [chat-name (if (string/blank? name)
                       (gfycat.core/generate-gfy public-key)
-                      (or name;(get-contact-translated chat-id :name name)
-                          "Chat name"))];(label :t/chat-name)))]
+                      (or name                              ;(get-contact-translated chat-id :name name)
+                          "Chat name"))]                    ;(label :t/chat-name)))]
       [react/view {:style {:height 64 :align-items :center :padding-horizontal 11 :justify-content :center}}
        [react/text {:style {:font-size 16 :color :black :font-weight "600"}}
         chat-name]
        (when pending-contact?
          [react/touchable-highlight
           {:on-press #(re-frame/dispatch [:add-pending-contact chat-id])}
-          [react/view ;style/add-contact
+          [react/view                                       ;style/add-contact
            [react/text {:style {:font-size 14 :color "#939ba1" :margin-top 3}}
             "Add to contacts"]]])])))
-       ;[react/text {:style {:font-size 14 :color "#939ba1" :margin-top 3}}
-        ;"Contact status not implemented"]])))
+;[react/text {:style {:font-size 14 :color "#939ba1" :margin-top 3}}
+;"Contact status not implemented"]])))
+
+(views/defview chat-text-input []
+  (views/letsubs [input-text [:chat :input-text]
+                  inp-ref (atom nil)]
+    [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
+                         :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
+     [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16 :flex 1 :margin-bottom 16}}
+      [react/view {:style {:flex 1}}
+       [react/text-input {:default-value  (or input-text "")
+                          :placeholder    "Type a message..."
+                          :auto-focus     true
+                          :multiline      true
+                          :blur-on-submit true
+                          :style          {:flex 1}
+                          :ref            #(reset! inp-ref %)
+                          :on-key-press   (fn [e]
+                                            (let [native-event (.-nativeEvent e)
+                                                  key (.-key native-event)]
+                                              (when (= key "Enter")
+                                                (js/setTimeout #(do
+                                                                  (.clear @inp-ref)
+                                                                  (.focus @inp-ref)) 200)
+                                                (re-frame/dispatch [:send-current-message]))))
+                          :on-change      (fn [e]
+                                            (let [native-event (.-nativeEvent e)
+                                                  text (.-text native-event)]
+                                              (re-frame/dispatch [:set-chat-input-text text])))}]]
+      [react/touchable-highlight {:on-press (fn []
+                                              (js/setTimeout #(do (.clear @inp-ref)(.focus @inp-ref)) 200)
+                                              (re-frame/dispatch [:send-current-message]))}
+       [react/view {:style {:margin-left     16 :width 30 :height 30 :border-radius 15 :background-color "#eef2f5" :align-items :center
+                            :justify-content :center}}
+        [icons/icon :icons/dropdown-up]]]]]))
 
 (views/defview chat-view []
-  (views/letsubs [current-chat [:get-current-chat]
-                  input-text [:chat :input-text]
-                  inp-ref (atom nil)]
+  (views/letsubs [current-chat [:get-current-chat]]
     [react/view {:style {:flex 1 :background-color "#eef2f5"}}
      [toolbar-chat-view]
      [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
      [messages-view current-chat]
-     [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
-                          :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
-      [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16 :flex 1 :margin-bottom 16}}
-       [react/view {:style {:flex 1}}
-        [react/text-input {:value       (or input-text "")
-                           :placeholder "Type a message..."
-                           :auto-focus true
-                           :multiline true
-                           :blur-on-submit true
-                           :style {:flex 1}
-                           :ref #(reset! inp-ref %)
-                           :on-key-press (fn [e]
-                                           (let [native-event (.-nativeEvent e)
-                                                 key (.-key native-event)]
-                                             (when (= key "Enter")
-                                               (js/setTimeout #(.focus @inp-ref) 200)
-                                               (re-frame/dispatch [:send-current-message]))))
-                           :on-change   (fn [e]
-                                          (let [native-event (.-nativeEvent e)
-                                                text (.-text native-event)]
-                                            (re-frame/dispatch [:set-chat-input-text text])))}]]
-       [react/touchable-highlight {:on-press (fn []
-                                                (js/setTimeout #(.focus @inp-ref) 200)
-                                                (re-frame/dispatch [:send-current-message]))}
-        [react/view {:style {:margin-left 16 :width 30 :height 30 :border-radius 15 :background-color "#eef2f5" :align-items :center
-                             :justify-content :center}}
-         [icons/icon :icons/dropdown-up]]]]]]))
+     [chat-text-input]]))
+
 
 (views/defview new-contact []
   (views/letsubs [new-contact-identity [:get :contacts/new-identity]
@@ -151,6 +179,7 @@
      [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
                           :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
       [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16}}
+       [react/text "#"]
        [react/view {:style {:flex 1}}
         [react/text-input {:placeholder "topic"
                            :on-change   (fn [e]

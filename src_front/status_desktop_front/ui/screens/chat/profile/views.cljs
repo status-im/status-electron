@@ -1,7 +1,9 @@
 (ns status-desktop-front.ui.screens.chat.profile.views
   (:require [status-desktop-front.react-native-web :as react]
             [status-im.ui.screens.profile.styles :as styles]
+            [status-desktop-front.ui.components.views :as components]
             [re-frame.core :as re-frame]
+            [reagent.core :as reagent]
             [status-im.utils.utils :refer [hash-tag?]]
             [clojure.string :as string]
             [cljs.nodejs :as nodejs])
@@ -76,6 +78,36 @@
    [profile-info-address-item contact]
    [profile-info-public-key-item public-key contact]])
 
+(views/defview sound-view [sound label sound-name]
+  [react/view {:style (merge styles/profile-setting-item {:height 30})}
+   [react/text {:style styles/profile-setting-text} label]
+   [react/view {:style {:flex 1}}]
+   [components/checkbox {:on-value-change
+                         #(re-frame/dispatch [:set-in [:desktop :notifications :sound] sound-name])
+                         :checked?
+                         (= sound sound-name)}]])
+
+(views/defview notifications []
+  (views/letsubs [notifications-enabled? [:get-in [:desktop :notifications :enabled?]]
+                  sound [:get-in [:desktop :notifications :sound]]]
+    [react/view
+     [react/view {:style styles/profile-setting-item}
+      [react/text {:style styles/profile-setting-text} "Notifications"]
+      [react/view {:style {:flex 1}}]
+      [components/checkbox {:on-value-change
+                            #(re-frame/dispatch [:set-in [:desktop :notifications :enabled?] %])
+                            :checked?
+                            notifications-enabled?}]]
+     [sound-view sound "Sound 1" :notif01]
+     [sound-view sound "Sound 2" :notif02]
+     [sound-view sound "Sound 3" :notif03]
+     [sound-view sound "Sound 4" :notif04]
+     [sound-view sound "Sound 5" :notif05]
+     [sound-view sound "Sound 6" :notif06]
+     [sound-view sound "Sound 7" :notif07]
+     [sound-view sound "Sound 8" :notif08]]))
+
+
 (views/defview profile []
   (views/letsubs [{:keys [status public-key] :as current-account} [:get-current-account]]
     [react/view {:style (merge styles/profile {:background-color :white})}
@@ -84,4 +116,5 @@
        [profile-badge current-account]
        [profile-status status true]]
       [react/view {:style styles/profile-info-container}
-       [my-profile-info current-account]]]]))
+       [my-profile-info current-account]]
+      [notifications]]]))

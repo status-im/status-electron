@@ -8,7 +8,8 @@
             status-desktop-front.override.login
             status-desktop-front.override.account
             status-desktop-front.override.contacts
-            status-desktop-front.override.recieve-message))
+            status-desktop-front.override.recieve-message
+            status-desktop-front.ui.screens.chat.events))
 
 (handlers/register-handler-fx
   :create-desktop-account

@@ -30,7 +30,7 @@
                                    { :role "quit"}]})))
     (.append menu
              (MenuItem.
-               (clj->js {:label "Status" :submenu [{ :label "Logs" :click #(re-frame/dispatch [:logs]) :accelerator "CmdOrCtrl+L"}]})))
+               (clj->js {:label "Dev" :submenu [{ :label "Logs" :click #(re-frame/dispatch [:logs]) :accelerator "CmdOrCtrl+L"}]})))
     (.setApplicationMenu Menu menu))
   (mount-root)
   (re-frame/dispatch-sync [:initialize-app]))

@@ -8,11 +8,21 @@
 
 ;;;; DESKTOP
 
+(def audio {:notif01 (js/Audio. (str js/__dirname "/resources/notif01.mp3"))
+            :notif02 (js/Audio. (str js/__dirname "/resources/notif02.mp3"))
+            :notif03 (js/Audio. (str js/__dirname "/resources/notif03.mp3"))
+            :notif04 (js/Audio. (str js/__dirname "/resources/notif04.mp3"))
+            :notif05 (js/Audio. (str js/__dirname "/resources/notif05.mp3"))
+            :notif06 (js/Audio. (str js/__dirname "/resources/notif06.mp3"))
+            :notif07 (js/Audio. (str js/__dirname "/resources/notif07.mp3"))
+            :notif08 (js/Audio. (str js/__dirname "/resources/notif08.mp3"))})
+
 (re-frame/reg-fx
   :send-desktop-notification
-  (fn [{:keys [content from]}]
+  (fn [{:keys [content from sound]}]
     (when-not (.hasFocus js/document)
-      (js/Notification. from (clj->js {:body content})))))
+      (when sound (.play (get audio sound)))
+      (js/Notification. from (clj->js {:body content :silent true})))))
 
 ;;;; old events
 
@@ -100,8 +110,8 @@
 
 (re-frame/reg-fx
   :update-message
-  (fn [message]))
-    ;(msg-store/update-message message)))
+  (fn [message]
+    (storage/update-message message)))
 
 (re-frame/reg-fx
   :save-message
