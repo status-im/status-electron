@@ -61,7 +61,6 @@
                   scroll-height (atom nil)]
     (let [_ (when (or (not @chat-id*) (not= @chat-id* chat-id))
               (reset! chat-id* chat-id)
-              (println "dirty hack")
               (js/setTimeout #(when scroll-ref (.scrollToEnd @scroll-ref)) 400))
           messages (re-frame/subscribe [:get-chat-messages chat-id])
           current-public-key (re-frame/subscribe [:get-current-public-key])]
