@@ -25,7 +25,7 @@
 ;;;; CONTACTS
 
 (defn save-contact [contact]
-  (swap! (:contacts @account) update-in (:whisper-identity contact) merge contact))
+  (swap! (:contacts @account) update-in [(:whisper-identity contact)] merge contact))
 
 (defn save-contacts [contacts]
   (mapv save-contact contacts))
