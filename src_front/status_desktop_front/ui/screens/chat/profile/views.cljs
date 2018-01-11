@@ -79,7 +79,7 @@
    [profile-info-public-key-item public-key contact]])
 
 (views/defview sound-view [sound label sound-name]
-  [react/view {:style (merge styles/profile-setting-item {:height 30})}
+  [react/view {:style (merge styles/profile-setting-item {:height 50})}
    [react/text {:style styles/profile-setting-text} label]
    [react/view {:style {:flex 1}}]
    [components/checkbox {:on-value-change
@@ -90,7 +90,7 @@
 (views/defview notifications []
   (views/letsubs [notifications-enabled? [:get-in [:desktop :notifications :enabled?]]
                   sound [:get-in [:desktop :notifications :sound]]]
-    [react/view
+    [react/view {:style {:flex 1}}
      [react/view {:style styles/profile-setting-item}
       [react/text {:style styles/profile-setting-text} "Notifications"]
       [react/view {:style {:flex 1}}]
@@ -98,23 +98,29 @@
                             #(re-frame/dispatch [:set-in [:desktop :notifications :enabled?] %])
                             :checked?
                             notifications-enabled?}]]
-     [sound-view sound "Sound 1" :notif01]
-     [sound-view sound "Sound 2" :notif02]
-     [sound-view sound "Sound 3" :notif03]
-     [sound-view sound "Sound 4" :notif04]
-     [sound-view sound "Sound 5" :notif05]
-     [sound-view sound "Sound 6" :notif06]
-     [sound-view sound "Sound 7" :notif07]
-     [sound-view sound "Sound 8" :notif08]]))
+     [react/scroll-view
+      [react/view {:style {:flex 1}}
+       [sound-view sound "Sound 1" :notif01]
+       [sound-view sound "Sound 2" :notif02]
+       [sound-view sound "Sound 3" :notif03]
+       [sound-view sound "Sound 4" :notif04]
+       [sound-view sound "Sound 5" :notif05]
+       [sound-view sound "Sound 6" :notif06]
+       [sound-view sound "Sound 7" :notif07]
+       [sound-view sound "Sound 8" :notif08]
+       [sound-view sound "Sound 9" :notif09]
+       [sound-view sound "Sound 10" :notif10]
+       [sound-view sound "Sound 11" :notif11]
+       [sound-view sound "Sound 12" :notif12]
+       [sound-view sound "Sound 13" :notif13]]]]))
 
 
 (views/defview profile []
   (views/letsubs [{:keys [status public-key] :as current-account} [:get-current-account]]
     [react/view {:style (merge styles/profile {:background-color :white})}
-     [react/scroll-view
-      [react/view {:style styles/profile-form}
-       [profile-badge current-account]
-       [profile-status status true]]
-      [react/view {:style styles/profile-info-container}
-       [my-profile-info current-account]]
-      [notifications]]]))
+     [react/view {:style styles/profile-form}
+      [profile-badge current-account]
+      [profile-status status true]]
+     [react/view {:style styles/profile-info-container}
+      [my-profile-info current-account]]
+     [notifications]]))

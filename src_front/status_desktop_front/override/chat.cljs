@@ -15,7 +15,12 @@
             :notif05 (js/Audio. (str js/__dirname "/resources/notif05.mp3"))
             :notif06 (js/Audio. (str js/__dirname "/resources/notif06.mp3"))
             :notif07 (js/Audio. (str js/__dirname "/resources/notif07.mp3"))
-            :notif08 (js/Audio. (str js/__dirname "/resources/notif08.mp3"))})
+            :notif08 (js/Audio. (str js/__dirname "/resources/notif08.mp3"))
+            :notif09 (js/Audio. (str js/__dirname "/resources/notif09.wav"))
+            :notif10 (js/Audio. (str js/__dirname "/resources/notif10.wav"))
+            :notif11 (js/Audio. (str js/__dirname "/resources/notif11.wav"))
+            :notif12 (js/Audio. (str js/__dirname "/resources/notif12.wav"))
+            :notif13 (js/Audio. (str js/__dirname "/resources/notif13.wav"))})
 
 (re-frame/reg-fx
   :send-desktop-notification
