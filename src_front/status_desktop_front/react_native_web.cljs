@@ -1,7 +1,7 @@
 (ns status-desktop-front.react-native-web
   (:require [reagent.core :as reagent]))
 
-(def react-native-web (js/require "react-native-web"))
+(def react-native-web (js/require "react-native"))
 
 (defn get-react-property [name]
   (aget react-native-web name))

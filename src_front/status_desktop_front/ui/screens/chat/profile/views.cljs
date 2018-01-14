@@ -9,8 +9,8 @@
             [cljs.nodejs :as nodejs])
   (:require-macros [status-im.utils.views :as views]))
 
-(def Electron (nodejs/require "electron"))
-(def clipboard (.-clipboard Electron))
+;(def Electron (nodejs/require "electron"))
+;(def clipboard (.-clipboard Electron))
 
 (defn profile-badge [{:keys [name last-online] :as contact}]
   [react/view {:style styles/profile-badge}
@@ -47,7 +47,7 @@
 
 
 (defn profile-info-item [{:keys [label value options text-mode empty-value? accessibility-label]}]
-  [react/touchable-highlight {:on-press #(.writeText clipboard value)}
+  [react/touchable-highlight {:on-press #(print "commented: (.writeText clipboard value)")}
    [react/view {:style styles/profile-setting-item}
 
      [react/view {:style (styles/profile-info-text-container options)}

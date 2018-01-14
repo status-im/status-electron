@@ -17,6 +17,7 @@
     "homoglyph-finder": "^1.1.1",
     "identicon.js": "github:status-im/identicon.js",
     "react": "^16.0.0-alpha.8",
+    "react-native-hyperlink": "git+https://github.com/obipawan/react-native-hyperlink.git",
     "react-dom": "16.0.0-alpha.8",
     "react-native": "git+https://github.com/status-im/react-native-desktop.git#react-native-qt",
     "react-native-crypto": "^2.1.1",
