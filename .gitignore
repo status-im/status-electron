@@ -16,3 +16,7 @@ electron/
 .idea/workspace.xml
 app/dev/js/
 app/prod/js/
+index.desktop.js
+desktop/
+.idea
+figwheel_server.log

@@ -28,6 +28,8 @@
             "desktop-prod" ["do"
                             ["cljsbuild" "once" "prod-main"]
                             ["cljsbuild" "once" "prod-front"]]
+            "desktop-prod-qt" ["do"
+                            ["cljsbuild" "once" "prod-front-qt"]]
 
             ;; electron packager for production
             "desktop-app-osx"   ["shell" "electron-packager" "./app/prod" "Status" "--platform=darwin" "--arch=x64" "--electron-version=1.8.2-beta.3" "--extraResource=./node_modules" "--icon=assets/icon1024.icns"]
@@ -125,7 +127,21 @@
 
                                                ;;:source-map "app/prod/js/test.js.map"
                                                :pretty-print true
-                                               :output-wrapper true}}}}
+                                               :output-wrapper true}}
+                       :prod-front-qt {:source-paths ["src_front" "src_front_profile/prod_qt"
+                                                   "../status-react/src"]
+                                    :compiler {:output-to     "index.desktop.js"
+                                               ;:warnings true
+                                               ;:elide-asserts true
+                                               :optimizations :simple
+                                               :output-dir "app/prod-qt/out_front"
+                                               ;:pretty-print true
+                                               ;:output-wrapper true
+                                               :main          "status-desktop-front.init"
+                                               :static-fns    true
+                                               :optimize-constants true
+                                               :closure-defines {"goog.DEBUG" false}
+                                               }}}}
   :figwheel {:http-server-root "public"
              :ring-handler figwheel-middleware/app
              :server-port 3449})
