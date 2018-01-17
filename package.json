@@ -1,5 +1,5 @@
 {
-  "name": "StatusDesktopQtTest",
+  "name": "StatusDesktop",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,6 +7,9 @@
     "test": "jest",
     "postinstall": "rn-nodeify --install crypto,stream,events,vm,fs --hack"
   },
+  "desktopExternalModules": [
+    "node_modules/react-native-randombytes"
+  ],
   "dependencies": {
     "awesome-phonenumber": "^1.0.13",
     "babel-plugin-transform-es2015-block-scoping": "6.15.0",
@@ -16,15 +19,15 @@
     "events": "^1.1.1",
     "homoglyph-finder": "^1.1.1",
     "identicon.js": "github:status-im/identicon.js",
-    "react": "^16.0.0-alpha.8",
-    "react-native-hyperlink": "git+https://github.com/obipawan/react-native-hyperlink.git",
+    "react": "^16.0.0",
     "react-dom": "16.0.0-alpha.8",
     "react-native": "git+https://github.com/status-im/react-native-desktop.git#react-native-qt",
     "react-native-crypto": "^2.1.1",
+    "react-native-hyperlink": "git+https://github.com/obipawan/react-native-hyperlink.git",
     "react-native-level-fs": "^3.0.0",
-    "react-native-randombytes": "^3.0.0",
+    "react-native-randombytes": "git+https://github.com/status-im/react-native-randombytes.git",
     "readable-stream": "^1.0.33",
-    "realm": "2.0.7",
+    "realm": "git+https://github.com/status-im/realm-js.git",
     "status-nodejs": "git+https://github.com/status-im/status-nodejs.git",
     "stream-browserify": "^1.0.0",
     "vm-browserify": "0.0.4",

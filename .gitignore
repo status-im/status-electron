@@ -20,3 +20,4 @@ index.desktop.js
 desktop/
 .idea
 figwheel_server.log
+app/prod-qt/

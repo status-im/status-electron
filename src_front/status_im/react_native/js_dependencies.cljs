@@ -34,7 +34,9 @@
        :DeviceEventEmitter #js {:addListener (fn [])}
        :Dimensions         #js {:get  (fn [])}})
 (def realm                  #js {:schemaVersion (fn [])
-                                 :close         (fn [])})
+                                 :close         (fn [])
+                                 :constructor   (fn [])
+                                 })
 (def sortable-listview      #js {})
 (def swiper                 #js {})
 (def vector-icons           #js {:default #js {}})

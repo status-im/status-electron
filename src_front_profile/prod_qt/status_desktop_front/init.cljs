@@ -1,12 +1,17 @@
 (ns status-desktop-front.init
-  (:require [status-desktop-front.core :as core]))
+  (:require [status-desktop-front.core :as core]
+            [status-desktop-front.react-native-web :as react]
+            )
+  )
 
 (enable-console-print!)
 
-(defn ^:export run
-  []
-  (core/init))
+(core/init)
 
-(defn ^:export log
-  [message]
-  (core/log message))
+;;(defn ^:export run
+;;  []
+;;  (core/init))
+;
+;(defn ^:export log
+;  [message]
+;  (core/log message))

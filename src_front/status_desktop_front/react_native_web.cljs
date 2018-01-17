@@ -3,6 +3,8 @@
 
 (def react-native-web (js/require "react-native"))
 
+(def app-registry (.-AppRegistry react-native-web))
+
 (defn get-react-property [name]
   (aget react-native-web name))
 
