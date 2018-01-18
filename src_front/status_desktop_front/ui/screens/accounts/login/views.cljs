@@ -25,7 +25,7 @@
        [react/text-input {:value       (or password "")
                           :placeholder "Password"
                           :auto-focus true
-                          :style {:padding-horizontal 17}
+                          :style {:padding-horizontal 17 :height 52}
                           :on-key-press (fn [e]
                                           (let [native-event (.-nativeEvent e)
                                                 key (.-key native-event)]
@@ -36,9 +36,12 @@
                                          (let [native-event (.-nativeEvent e)
                                                text (.-text native-event)]
                                            (re-frame/dispatch [:set-in [:accounts/login :password] text])
-                                           (re-frame/dispatch [:set-in [:accounts/login :error] ""])))}]]
+                                           (re-frame/dispatch [:set-in [:accounts/login :error] ""])))
+                          }]
+       ]
       [react/view {:style {:margin-top 30}}
        [components/button
         "Sign in"
         (> (count password) 6)
-        #(re-frame/dispatch [:login-account address password])]]]]))
+        #(re-frame/dispatch [:login-account address password])]]]]
+           ))
