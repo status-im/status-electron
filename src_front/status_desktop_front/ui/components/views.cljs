@@ -60,16 +60,15 @@
                         :align-items      :center
                         :justify-content  :center
                         :border-radius    8
-                        :background-color :white
-                        :box-shadow       "0 2px 6px 0 rgba(0, 0, 0, 0.25)"}}
+                        :background-color :white}}
     [react/text {:style (button-label-style enabled?)}
      label]]])
 
-(def text-button-label-style
-  {:color          :white
-   :height         23
-   :font-size      15
-   :letter-spacing -0.2})
+(defn button-label-style [enabled?]
+      {:color          "#4360df"
+       :font-size      15
+       :opacity        (if enabled? 1 0.3)
+       :letter-spacing -0.2})
 
 (defn text-button [label on-press]
   [react/touchable-highlight {:on-press on-press}

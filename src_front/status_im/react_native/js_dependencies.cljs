@@ -1,5 +1,9 @@
 (ns status-im.react-native.js-dependencies)
 
+(enable-console-print!)
+
+(print "Load status-electron js-dependencies")
+
 (def action-button          #js {:default #js {:Item #js {}}})
 (def android-sms-listener   #js {})
 (def autolink               #js {:default #js {}})
@@ -16,7 +20,7 @@
 (def i18n                   #js {})
 (def image-crop-picker      #js {})
 (def image-resizer          #js {})
-(def instabug               #js {})
+(def instabug               #js {:IBGLog ( fn [])})
 (def invertible-scroll-view #js {})
 (def linear-gradient        #js {})
 (def mapbox-gl              #js {:setAccessToken (fn [])})
@@ -35,7 +39,7 @@
        :Dimensions         #js {:get  (fn [])}})
 (def realm                  #js {:schemaVersion (fn [])
                                  :close         (fn [])
-                                 :constructor   (fn [])
+                                 :constructor (fn [])
                                  })
 (def sortable-listview      #js {})
 (def swiper                 #js {})

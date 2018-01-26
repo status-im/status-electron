@@ -21,18 +21,18 @@
                            :opacity 0.2 :border-radius 8 :padding-vertical 17}}
        [react/text-input {:value       (or passphrase "")
                           :placeholder "Passphrase"
-                          :multiline true
-                          :auto-focus true
-                          :style {:padding-horizontal 17}
+                          :multiline   true
+                          :auto-focus  true
+                          :style       {:padding-horizontal 17 :flex 1}
                           :on-change   (fn [e]
-                                         (let [native-event (.-nativeEvent e)
-                                               text (.-text native-event)]
-                                           (re-frame/dispatch [:set-in [:accounts/recover :passphrase] text])))}]]
+                                           (let [native-event (.-nativeEvent e)
+                                                 text (.-text native-event)]
+                                                (re-frame/dispatch [:set-in [:accounts/recover :passphrase] text])))}]]
       [react/view {:style {:height 52 :width 290 :background-color :white :margin-top 8
                            :opacity 0.2 :border-radius 8 :justify-content :center}}
        [react/text-input {:value       (or password "")
                           :placeholder "Password"
-                          :style {:padding-horizontal 17}
+                          :style {:padding-horizontal 17 :flex 1}
                           :on-key-press (fn [e]
                                           (let [native-event (.-nativeEvent e)
                                                 key (.-key native-event)]

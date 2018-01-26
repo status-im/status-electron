@@ -43,7 +43,7 @@
 
 (views/defview main-tabs []
   (views/letsubs [current-tab [:get :left-view-id]]
-    [react/view {:styles {:border-color :red :border-width 1}}
+    [react/view {:style {:border-color :red :border-width 1}}
      [react/view {:style tabs.styles/tabs-container}
       (for [[index {:keys [content view-id]}] tabs-list-indexed]
         ^{:key index} [tab index content view-id (= current-tab view-id)])]]))

@@ -14,5 +14,4 @@
    :height           64
    :border-radius    8
    :justify-content  :center
-   :background-color :white
-   :box-shadow       "0 2px 6px 0 rgba(0, 0, 0, 0.25)"})
+   :background-color :white})

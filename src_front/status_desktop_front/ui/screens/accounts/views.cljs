@@ -5,6 +5,7 @@
             [status-desktop-front.react-native-web :as react]
             [status-desktop-front.ui.components.views :as components]
             [status-desktop-front.ui.components.icons :as icons]
+            status-desktop-front.ui.screens.events
             [re-frame.core :as re-frame]
             [clojure.string :as string]))
 
@@ -50,8 +51,8 @@
        [components/back-button #(re-frame/dispatch [:navigate-back])])
      [react/view {:style {:flex 1 :align-items :center :justify-content :center}}
       [react/view {:style {:width 290 :align-items :center}}
-       [react/image {:source {:uri "./resources/logo.png"}
-                     :style  {:width 192 :height 61}}]
+       [react/image {:source (js/require "./resources/logo.png")
+                     :style  {:width 192 :height 61 :resize-mode "stretch"}}]
        [react/view {:style st/account-title-conatiner}
         [react/text {:style styles/account-title-text}
          "To create an account set up \na password"]];(i18n/label :t/sign-in-to-status)]]
@@ -60,7 +61,7 @@
                              :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
          [react/text-input {:value       (or profile-name "")
                             :auto-focus  true
-                            :style {:padding-horizontal 17}
+                            :style {:padding-horizontal 17 :flex 1}
                             :placeholder "Name"
                             :on-change   (fn [e]
                                            (let [native-event (.-nativeEvent e)
@@ -69,7 +70,7 @@
         [react/view {:style {:height 52 :width 290 :background-color :white
                              :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
          [react/text-input {:value       (or password "")
-                            :style {:padding-horizontal 17}
+                            :style {:padding-horizontal 17 :flex 1 }
                             :placeholder "Password"
                             :secure-text-entry true
                             :on-change   (fn [e]
@@ -80,7 +81,7 @@
                              :opacity 0.2 :border-radius 8 :margin-top 8 :justify-content :center}}
          [react/text-input {:value       (or password-confirm "")
                             :placeholder "Repeat your password"
-                            :style {:padding-horizontal 17}
+                            :style {:padding-horizontal 17 :flex 1}
                             :on-key-press (fn [e]
                                             (let [native-event (.-nativeEvent e)
                                                   key (.-key native-event)]
