@@ -49,15 +49,14 @@ git checkout master-react-native-qt
 ## Prepare project for compilation
 
 #### Install `react-native-cli`
-React native desktop uses extended version of `react-native-cli` and you need to install it.
+React native for desktop uses extended version of `react-native-cli` and you need to install it.
 
 Uninstall previous version (if needed)
 `npm uninstall -g react-native-cli`
 
-Install desktop version
-In `status-electron` folder:
+Install desktop version:
 ```
-cd react-native-desktop/react-native-cli
+cd ../react-native-desktop/react-native-cli
 npm install -g
 ```
 
