@@ -18,7 +18,7 @@
        [react/text {:style {:color :white :font-size 18}}
         "Recover account"]]
       [react/view {:style {:height 107 :width 290 :background-color :white
-                           :opacity 0.2 :border-radius 8 :padding-vertical 17}}
+                           :opacity 0.2 :border-radius 8}}
        [react/text-input {:value       (or passphrase "")
                           :placeholder "Passphrase"
                           :multiline   true

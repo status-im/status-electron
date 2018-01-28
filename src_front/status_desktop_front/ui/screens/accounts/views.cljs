@@ -27,7 +27,7 @@
   (letsubs [accounts [:get-accounts]]
     [react/view {:style (merge st/accounts-container {:align-items :center})}
      [react/view {:style {:flex 1 :width 290 :align-items :center :margin-top 160}}
-      [react/image {:source {:uri "./resources/logo.png"}
+      [react/image {:source (js/require "./resources/logo.png")
                     :style  {:width 192 :height 61}}]
       [react/text {:style styles/account-title-text}
        "Sign in to your account"];(i18n/label :t/sign-in-to-status)]]
@@ -56,7 +56,7 @@
        [react/view {:style st/account-title-conatiner}
         [react/text {:style styles/account-title-text}
          "To create an account set up \na password"]];(i18n/label :t/sign-in-to-status)]]
-       [react/view {:style st/accounts-list-container}
+       [react/view
         [react/view {:style {:height 52 :width 290 :background-color :white
                              :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
          [react/text-input {:value       (or profile-name "")
