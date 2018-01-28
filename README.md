@@ -1,205 +1,108 @@
 # status-desktop
 
-Status Desktop (React Native Web and Electron)
-
-Checkout `https://github.com/status-im/status-react/tree/feature/status-electron` branch into `status-react` folder 
-
-You should have `status-react` and `status-electron` in the same directory
-
-```
-+-- status-dev-folder
-|   +-- status-react // status-react repo (https://github.com/status-im/status-react) `feature/status-electron` branch
-|   +-- status-electron // this repo
-
-```
-
-Make simlink to resources folder 
-
-```
-ln -s /Users/*/status-dev-folder/status-react/resources /Users/*/status-dev-folder/status-electron/resources
-```
+Status Desktop (Based on react-native-desktop)
 
 ## Requirements
 
 * leiningen 2.6.x +
 * node v8.x.x (important to have exactly 8 version not 7 and not 9)
-* electron v1.8.2-beta.3 +
+* Qt 5.9 (https://www.qt.io/download-qt-installer)
 
 
-## Project Directory
+## Prepare project directory
 
-  see your app dir. looks like
-
+#### Create folder for code:
 ```
-.
-+-- README.md
-+-- app
-|   +-- dev // development mode dir
-|   |   +-- index.html // entry html file
-|   |   +-- js
-|   |   |   +-- main.js
-|   |   +-- package.json // for Desktop app
-|   +-- prod // production mode dir
-|       +-- index.html // entry html file
-|       +-- js
-|       |   +-- main.js
-|       +-- package.json // for Desktop app
-+-- package.json // for Compile
-+-- project.clj // compile settings desktop app
-+-- resources
-+-- src
-|   +-- status_desktop
-|       +-- core.cljs // ClojureScript for Electron in here
-+-- src_front
-|   +--status_desktop_front
-|      +-- core.cljs //  Status ClojureScript enter point in here
-+-- src_front_profile
-    +--status_desktop_front
-       +-- dev
-       |   +-- init.cljs
-       +-- prod
-           +-- init.cljs
+mkdir status-dev-folder
+cd status-dev-folder/
 ```
 
-## Usage
-
-### step 1
-
-Install electron If not already installed
-
-`npm install -g electron@beta`
-
-Install npm modules
-
-`npm install`
-
-Check node version
-
-`node -v` it should be 8.x.x if not switch to 8.x.x version `n 8.9.1`
-
-### step 2
-
-run cljsbuild `lein desktop-once`.
+#### Clone react-native-desktop
+`git clone https://github.com/status-im/react-native-desktop.git`
 
 
+#### Clone status-react repository, `feature/status-electron` branch:
 ```
-$ lein desktop-once
-
-Compiling ClojureScript.
-Compiling "app/js/cljsbuild-main.js" from ["src"]...
-Successfully compiled "app/js/cljsbuild-main.js" in 10.812 seconds.
-...
-Successfully compiled "app/dev/js/front.js" in 10.588 seconds.
+git clone https://github.com/status-im/status-react.git
+cd status-react
+git checkout feature/status-electron
 ```
 
-
-### step 3
-
-You can run Desktop application.
-
-#### development mode
-
-development mode use figwheel. run alias `desktop-figwheel`.  before run application.
-Open other terminal window.
-
+#### Clone status-electron repository, `master-react-native-qt` branch:
 ```
-$ lein desktop-figwheel
+cd ..
+git clone https://github.com/status-im/status-electron.git
+cd status-electron
+git checkout master-react-native-qt
 ```
 
-and you can run Electron(Atom-Shell) app.
+#### Now your directory structure is:
 
-On OS X:
-
-```
-$ electron app/dev
-```
-
-On Linux:
+  ```
++-- status-dev-folder
+|   +-- react-native-desktop   // `react-native-qt` branch
+|   +-- status-react           // `feature/status-electron` branch
+|   +-- status-electron        // `master-react-native-qt` branch
 
 ```
-$ ./electron/electron app/dev
+
+## Prepare project for compilation
+
+#### Install `react-native-cli`
+React native desktop uses extended version of `react-native-cli` and you need to install it.
+
+Uninstall previous version (if needed)
+`npm uninstall -g react-native-cli`
+
+Install desktop version
+In `status-electron` folder:
+```
+cd react-native-desktop/react-native-cli
+npm install -g
 ```
 
-On Windows:
-
+#### Install node modules for `status-electron`
 ```
-$ .\electron\electron.exe app/dev
-```
-
-
-#### production mode
-
-you can run Electron(Atom-Shell) app.
-
-On OS X:
-
-```
-$ electron app/prod
+cd ../../status-electron
+npm install
 ```
 
-On Linux:
+#### Generate desktop project
+`react-native desktop`
 
+
+#### Specify Qt location
+Now you have `status-electron/desktop` project that contains files necessary for building desktop app.
+To build qt project you have to specify where your Qt installed. You can make this in file `status-electron/desktop/build.sh` by updating cmake invokation like this:
+
+`cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/PATH_TO_QT_INSTALLATION/5.9/clang_64/ -DEXTERNAL_MODULES_DIR="$externalModulesPaths" . && make && cp ./bin/StatusDesktop click/`
+
+#### Compile project
+Result of compilation is `index.desktop.js` file. After previous command you already have basic `index.desktop.js`, so we need to remove it and invoke compilation: 
 ```
-$ ./electron/electron app/prod
-```
-
-On Windows:
-
-```
-$ .\electron\electron.exe app/prod
-```
-
-
-## Package App
-
-### (If not already installed Electron-packager.)
-
-```
-$ npm install -g electron-packager
+rm index.desktop.js
+lein desktop-prod-qt
 ```
 
-### run command
+## Run app
 
-#### for OSX
+To run the desktop app you need 3 terminal windows (assuming all are open at `status-dev-folder/status-electron`):
+1) In the first you need to run react-native bundler:
 
-```
-$ lein desktop-app-osx
-```
+`npm start`
 
-#### for OSX app store
+2) In the second you need to run `ubuntu-server.js`. It is a process where runs javascript code invoked by desktop project.
 
-```
-$ desktop-app-store
-```
+`cd node_modules/react-native`
+`./ubuntu-server.js`
 
-#### for windows 32bit app
+3) In third terminal we are running the desktop app:
 
-```
-$ desktop-app-win32
-```
+`react-native run-desktop`
 
-#### for windows 64bit app
+The desktop app will start. It will request javascript code from bundler, so please wait until bundler is ready.
+When you modified clojurescript code and recompiled it to javascript, you can reload app without restarting. Call developer menu `Cmd+R` and select `Reload`
 
-```
-$ desktop-app-win64
-```
-
-#### for linux
-
-```
-$ desktop-app-linux
-```
-
-
-## Aliases
-
-you can use aliases in project directory.
-
-```
-$ lein desktop-figwheel      # start figwheel
-$ lein desktop-once          # build JavaScript for develop 
-$ lein desktop-prod          # build JavaScript for production
-```
 
 ### Contact us
  
