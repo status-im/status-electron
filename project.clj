@@ -129,17 +129,16 @@
                                                ;;:source-map "app/prod/js/test.js.map"
                                                :pretty-print true
                                                :output-wrapper true}}
-                       :dev-front-qt {:source-paths ["src_front" "src_front_profile/dev_qt"
-                                                      "../status-react/src"]
-                                       :compiler {:main          "env.main"
-                                                  :output-to     "app/dev-qt/out_front/not-used.js"
-                                                  :output-dir "app/dev-qt/out_front"
+                       :dev-front-qt {:source-paths ["src_front" "env/dev" "../status-react/src"]
+                                       :compiler {:main          "env.desktop.main"
+                                                  :output-to     "target/desktop/not-used.js"
+                                                  :output-dir "target/desktop"
 
-                                                  :warnings true
-                                                  :elide-asserts true
+                                                  ;:warnings true
+                                                  ;:elide-asserts true
                                                   :optimizations :none
-                                                  :pretty-print true
-                                                  :output-wrapper true
+                                                  ;:pretty-print true
+                                                  ;:output-wrapper true
                                                   }}
                        :prod-front-qt {:source-paths ["src_front" "src_front_profile/prod_qt"
                                                    "../status-react/src"]
