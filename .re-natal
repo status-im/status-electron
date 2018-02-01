@@ -9,14 +9,6 @@
     "resources/icons"
   ],
   "platforms": {
-    "ios": {
-      "host": "localhost",
-      "modules": []
-    },
-    "android": {
-      "host": "localhost",
-      "modules": []
-    },
     "desktop": {
       "host": "localhost",
       "modules": []

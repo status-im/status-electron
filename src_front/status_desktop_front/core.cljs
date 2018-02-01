@@ -10,16 +10,19 @@
             ))
 
 (defn app-root []
-      (fn []
-          [views/main]
-          ))
 
-(defn mount-root []
-    (.registerComponent react/app-registry "StatusDesktop" #(reagent/reactify-component app-root)))
+  (reagent/create-class
+    {
+     :component-did-mount (fn [] ())
+     :display-name "root"
+     :reagent-render views/main}))
+
+(defn mount-root [root-el]
+    (.registerComponent react/app-registry "StatusDesktop" #(reagent/reactify-component root-el)))
 
 
-(defn init []
-  (mount-root)
+(defn init [root-el]
+  (mount-root root-el)
   (re-frame/dispatch-sync [:initialize-app]))
 
 (defn log [message]
