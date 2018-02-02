@@ -19,7 +19,7 @@
                               :login login.views/login)]
              [react/view {:style {:flex 1}}
               [react/view {:style {:flex (if logs-visible 3 1)}}
-               [component]]
+               [chat.view/chat]]
               (when logs-visible
                     [react/view {:style {:flex 1 :background-color :white}}
                      [react/text "Logs"]
