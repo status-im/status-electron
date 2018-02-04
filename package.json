@@ -38,7 +38,8 @@
     "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
     "react-test-renderer": "16.0.0",
-    "rn-nodeify": "github:mvayngrib/rn-nodeify"
+    "rn-nodeify": "github:mvayngrib/rn-nodeify",
+    "re-natal": "git+https://github.com/status-im/re-natal.git#master"
   },
   "jest": {
     "preset": "react-native"

@@ -17,7 +17,10 @@ electron/
 app/dev/js/
 app/prod/js/
 index.desktop.js
+index.android.js
+index.ios.js
 desktop/
 .idea
 figwheel_server.log
 app/prod-qt/
+app/

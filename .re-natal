@@ -1,0 +1,21 @@
+{
+  "name": "StatusDesktop",
+  "interface": "reagent",
+  "modules": [
+    "web3"
+  ],
+  "imageDirs": [
+    "resources/images",
+    "resources/icons"
+  ],
+  "platforms": {
+    "desktop": {
+      "host": "localhost",
+      "modules": []
+    }
+  },
+  "envRoots": {
+    "dev": "env/dev",
+    "prod": "env/prod"
+  }
+}
