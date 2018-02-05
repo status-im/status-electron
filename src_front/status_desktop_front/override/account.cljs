@@ -19,7 +19,6 @@
 (re-frame/reg-fx
   ::accounts.events/save-account
   (fn [account]
-    (print "before ::accounts.events/save-account")
     (storage/save-account account)))
 
 (re-frame/reg-fx
