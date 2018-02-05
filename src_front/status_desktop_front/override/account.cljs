@@ -19,12 +19,15 @@
 (re-frame/reg-fx
   ::accounts.events/save-account
   (fn [account]
+    (print "before ::accounts.events/save-account")
     (storage/save-account account)))
 
 (re-frame/reg-fx
   ::accounts.events/create-account
   (fn [password]
-    (re-frame/dispatch [::accounts.events/account-created (json->clj (status-go/create-account password)) password])))
+      (status-go/create-account password (fn [data]
+                                             (re-frame/dispatch [::accounts.events/account-created (json->clj data) password])))))
+
 
 ;; RECOVER FX
 

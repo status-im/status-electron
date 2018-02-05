@@ -12,7 +12,8 @@
 (re-frame/reg-fx
   ::login.events/login
   (fn [[address password]]
-    (re-frame/dispatch [:login-handler (status-go/login address password) address])))
+      (status-go/login address password (fn [data]
+                                             (re-frame/dispatch [:login-handler data address])))))
 
 (re-frame/reg-fx ::login.events/clear-web-data #()) ;(status/clear-web-data))
 

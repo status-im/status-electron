@@ -21,7 +21,10 @@
   ;       :contacts (local-storage (atom {}) (keyword (str address "contacts")))
   ;       :chats (local-storage (atom {}) (keyword (str address "chats")))
   ;       :messages (local-storage (atom {}) (keyword (str address "messages"))))
-      )
+  (swap! account assoc
+         :contacts ( atom {} )
+         :chats  ( atom {} )
+         :messages  ( atom {} )))
 
 
 ;;;; CONTACTS
