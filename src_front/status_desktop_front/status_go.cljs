@@ -7,10 +7,9 @@
   (when (exists? (.-NativeModules react/react-native-web))
         (.-Status (.-NativeModules react/react-native-web))))
 
-(defn call-web3 [payload]
-      (print "!!!!!!!!! call-web3")
-  ;(.sendSync ipcRenderer "CallRPC" payload)
-      )
+(defn call-web3 [payload callback]
+    (.sendWeb3Request status payload (fn [data]
+                                  (callback data))))
 
 (defn start-node [config]
     (.log js/console (.startNode status config)))
@@ -25,7 +24,6 @@
                                       (callback data))))
 
 
-(defn recover-account [passphrase password]
-      (print "!!!!!!!!! recover-account")
-  ;(.sendSync ipcRenderer "RecoverAccount" passphrase password)
-      )
+(defn recover-account [passphrase password callback]
+      (.recoverAccount status passphrase password (fn [data]
+                                          (callback data))))

@@ -5,7 +5,8 @@
 
 (defn make-web3 []
   (Web3. #js {:sendAsync (fn [payload callback]
-                           (let [response (status-go/call-web3 (.stringify js/JSON payload))]
-                             (if (= "" response)
-                               (.log js/console :web3-response-error)
-                               (callback nil (.parse js/JSON response)))))}))
+                             (status-go/call-web3 (.stringify js/JSON payload)
+                                                  (fn [response]
+                                                     (if (= "" response)
+                                                       (.log js/console :web3-response-error)
+                                                       (callback nil (.parse js/JSON response))))))}))
