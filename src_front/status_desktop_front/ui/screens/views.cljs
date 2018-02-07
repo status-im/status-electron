@@ -1,10 +1,10 @@
 (ns status-desktop-front.ui.screens.views
   (:require-macros [status-im.utils.views :as views])
   (:require [status-desktop-front.react-native-web :as react]
-            [status-desktop-front.ui.screens.chat.view :as chat.view]
             [status-desktop-front.ui.screens.accounts.views :as accounts.views]
             [status-desktop-front.ui.screens.accounts.recover.views :as recover.views]
-            [status-desktop-front.ui.screens.accounts.login.views :as login.views]))
+            [status-desktop-front.ui.screens.accounts.login.views :as login.views]
+            [status-desktop-front.ui.screens.main.views :as main.views]))
 
 (views/defview main []
   (views/letsubs [view-id [:get :view-id]
@@ -15,7 +15,7 @@
                         :accounts accounts.views/accounts
                         :recover recover.views/recover
                         :create-account accounts.views/create-account
-                        (:chat-list :new-contact :chat) chat.view/chat
+                        (:new-contact :chat :chat-list) main.views/main-views
                         :login login.views/login)]
         [react/view {:style {:flex 1}}
          [react/view {:style {:flex (if logs-visible 3 1)}}

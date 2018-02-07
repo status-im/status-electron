@@ -1,4 +1,4 @@
-(ns status-desktop-front.ui.screens.chat.events
+(ns status-desktop-front.ui.screens.main.events
   (:require [status-im.utils.handlers :as handlers]
             [re-frame.core :as re-frame]
             [cljs.nodejs :as nodejs]))

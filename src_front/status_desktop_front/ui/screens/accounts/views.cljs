@@ -56,31 +56,31 @@
         [react/text {:style styles/account-title-text}
          "To create an account set up \na password"]];(i18n/label :t/sign-in-to-status)]]
        [react/view {:style st/accounts-list-container}
-        [react/view {:style {:height 52 :width 290 :background-color :white
-                             :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
+        [react/view {:style {:height 52 :width 290 :background-color "#FFFFFF4D"
+                             :border-radius 8 :margin-top 22 :justify-content :center}}
          [react/text-input {:value       (or profile-name "")
                             :auto-focus  true
-                            :style {:padding-horizontal 17}
+                            :style {:padding-horizontal 17 :color :white}
                             :placeholder "Name"
                             :on-change   (fn [e]
                                            (let [native-event (.-nativeEvent e)
                                                  text (.-text native-event)]
                                              (re-frame/dispatch [:set-in [:accounts/create :name] text])))}]]
-        [react/view {:style {:height 52 :width 290 :background-color :white
-                             :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
+        [react/view {:style {:height 52 :width 290 :background-color "#FFFFFF4D"
+                             :border-radius 8 :margin-top 22 :justify-content :center}}
          [react/text-input {:value       (or password "")
-                            :style {:padding-horizontal 17}
+                            :style {:padding-horizontal 17 :color :white}
                             :placeholder "Password"
                             :secure-text-entry true
                             :on-change   (fn [e]
                                            (let [native-event (.-nativeEvent e)
                                                  text (.-text native-event)]
                                              (re-frame/dispatch [:set-in [:accounts/create :password] text])))}]]
-        [react/view {:style {:height 52 :width 290 :background-color :white
-                             :opacity 0.2 :border-radius 8 :margin-top 8 :justify-content :center}}
+        [react/view {:style {:height 52 :width 290 :background-color "#FFFFFF4D"
+                             :border-radius 8 :margin-top 8 :justify-content :center}}
          [react/text-input {:value       (or password-confirm "")
                             :placeholder "Repeat your password"
-                            :style {:padding-horizontal 17}
+                            :style {:padding-horizontal 17 :color :white}
                             :on-key-press (fn [e]
                                             (let [native-event (.-nativeEvent e)
                                                   key (.-key native-event)]

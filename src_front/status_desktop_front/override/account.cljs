@@ -32,5 +32,5 @@
   ::recover.events/recover-account-fx
   (fn [[passphrase password]]
     (re-frame/dispatch [:account-recovered (status-go/recover-account
-                                             (string/trim passphrase)
-                                             password)])))
+                                             password
+                                             (string/trim passphrase))])))

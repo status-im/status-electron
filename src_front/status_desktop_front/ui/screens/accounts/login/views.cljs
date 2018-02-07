@@ -20,12 +20,12 @@
       [react/view {:style {:margin-vertical 22}}
         [react/text {:style {:color :white :font-size 18}}
          name]]
-      [react/view {:style {:height 52 :width 290 :background-color :white
-                           :opacity 0.2 :border-radius 8 :justify-content :center}}
+      [react/view {:style {:height 52 :width 290 :background-color "#FFFFFF4D"
+                           :border-radius 8 :justify-content :center}}
        [react/text-input {:value       (or password "")
                           :placeholder "Password"
                           :auto-focus true
-                          :style {:padding-horizontal 17}
+                          :style {:padding-horizontal 17 :color :white}
                           :on-key-press (fn [e]
                                           (let [native-event (.-nativeEvent e)
                                                 key (.-key native-event)]

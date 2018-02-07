@@ -9,7 +9,7 @@
             status-desktop-front.override.account
             status-desktop-front.override.contacts
             status-desktop-front.override.recieve-message
-            status-desktop-front.ui.screens.chat.events))
+            status-desktop-front.ui.screens.main.events))
 
 (handlers/register-handler-fx
   :create-desktop-account

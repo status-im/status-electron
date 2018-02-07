@@ -7,10 +7,17 @@
     .app, html, body {
     height:100%;
     margin:0;
+    background-color:#4360df;
     }
     .app {
         display: flex;
         flex-direction: column;
+    }
+    .container {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
     }
     input:focus,
     select:focus,
@@ -21,7 +28,9 @@
   </style>
   <body>
     <div id="app" class="app">
-      <p>Loading...</p>
+      <div class="container">
+        <img src="resources/logo.png">
+      </div>
     </div>
     <script type="text/javascript" src="js/out_front/goog/base.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/front.js" charset="utf-8"></script>

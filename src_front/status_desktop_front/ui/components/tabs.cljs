@@ -12,10 +12,10 @@
     :content {:title         "Home"
               :icon-inactive :icons/home
               :icon-active   :icons/home-active}}
-   {:view-id :wallet
-    :content {:title         "Wallet"
-              :icon-inactive :icons/wallet
-              :icon-active   :icons/wallet-active}}
+   #_{:view-id :wallet
+      :content {:title         "Wallet"
+                :icon-inactive :icons/wallet
+                :icon-active   :icons/wallet-active}}
 
    {:view-id :profile
     :content {:title         "Profile"

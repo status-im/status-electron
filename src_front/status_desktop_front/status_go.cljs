@@ -20,5 +20,8 @@
     (.log js/console (str "Login result " res))
     res))
 
-(defn recover-account [passphrase password]
-  (.sendSync ipcRenderer "RecoverAccount" passphrase password))
+(defn recover-account [password passphrase]
+  (.sendSync ipcRenderer "RecoverAccount" password passphrase))
+
+(defn add-peer [enode]
+  (.sendSync ipcRenderer "AddPeer" enode))

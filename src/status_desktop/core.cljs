@@ -70,5 +70,9 @@
        (set! (.-returnValue event) (.Login status-go address password))))
 
 (.on ipcMain "RecoverAccount"
-     (fn [event passphrase password]
-       (set! (.-returnValue event) (.RecoverAccount status-go passphrase password))))
+     (fn [event password passphrase]
+       (set! (.-returnValue event) (.RecoverAccount status-go password passphrase))))
+
+#_(.on ipcMain "AddPeer"
+     (fn [event enode]
+       (set! (.-returnValue event) (.AddPeer status-go enode))))
