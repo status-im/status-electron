@@ -9,7 +9,8 @@
   },
   "desktopExternalModules": [
     "node_modules/react-native-randombytes",
-    "modules/react-native-status/desktop"
+    "modules/react-native-status/desktop",
+    "node_modules/react-native-fs/desktop"
   ],
   "dependencies": {
     "awesome-phonenumber": "^1.0.13",
@@ -23,6 +24,7 @@
     "react": "^16.0.0",
     "react-dom": "16.0.0-alpha.8",
     "react-native": "git+https://github.com/status-im/react-native-desktop.git#react-native-qt",
+    "react-native-fs": "git+https://github.com/status-im/react-native-fs.git",
     "react-native-crypto": "^2.1.1",
     "react-native-hyperlink": "git+https://github.com/obipawan/react-native-hyperlink.git",
     "react-native-level-fs": "^3.0.0",

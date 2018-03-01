@@ -2,7 +2,7 @@
   (:require [reagent.core :as reagent]
             [re-frame.core :as re-frame]
             status-im.ui.screens.subs
-            ;status-desktop-front.storage
+            [status-desktop-front.storage :as storage]
             status-desktop-front.ui.screens.events
             [status-desktop-front.ui.screens.views :as views]
             ;[cljs.nodejs :as nodejs]
@@ -18,9 +18,13 @@
     (.registerComponent react/app-registry "StatusDesktop" #(reagent/reactify-component app-root)))
 
 
+(add-watch storage/accounts :watcher (fn [key atom old-state new-state]
+                                       (re-frame/dispatch-sync [:initialize-app])))
+
 (defn init []
   (mount-root)
-  (re-frame/dispatch-sync [:initialize-app]))
+  ;(re-frame/dispatch-sync [:initialize-app])
+  )
 
 (defn log [message]
   (re-frame/dispatch [:log-message message]))
