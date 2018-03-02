@@ -57,8 +57,15 @@ public:
     Q_INVOKABLE void closeApplication();
 
     Q_INVOKABLE static bool JSCEnabled();
-    Q_INVOKABLE static void signalEvent(const char* signal);
-    Q_INVOKABLE static void jailEvent(QString chatId, QString data);
+    Q_INVOKABLE static void jailSignalEventCallback(const char* signal);
+
+    void emitSignalEvent(const char* signal);
+
+Q_SIGNALS:
+    void jailSignalEvent(const char* signal);
+
+private Q_SLOTS:
+    void onJailSignalEvent(const char* signal);
 
 private:
     QScopedPointer<RCTStatusPrivate> d_ptr;

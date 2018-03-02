@@ -29,10 +29,18 @@ struct RegisterQMLMetaType {
 
 class RCTStatusPrivate {
 public:
-    Bridge* bridge = nullptr;
+    static Bridge* bridge;
+    static RCTStatus* rctStatus;
 };
 
-RCTStatus::RCTStatus(QObject* parent) : QObject(parent), d_ptr(new RCTStatusPrivate) {}
+Bridge* RCTStatusPrivate::bridge = nullptr;
+RCTStatus* RCTStatusPrivate::rctStatus = nullptr;
+
+RCTStatus::RCTStatus(QObject* parent) : QObject(parent), d_ptr(new RCTStatusPrivate) {
+    RCTStatusPrivate::rctStatus = this;
+    SetJailSignalCallback((void*)&RCTStatus::jailSignalEventCallback);
+    connect(this, &RCTStatus::jailSignalEvent, this, &RCTStatus::onJailSignalEvent);
+}
 
 RCTStatus::~RCTStatus() {}
 
@@ -76,7 +84,7 @@ void RCTStatus::parseJail(QString chatId, QString js, double callbackId) {
 void RCTStatus::callJail(QString chatId, QString path, QString params, double callbackId) {
     Q_D(RCTStatus);
     qDebug() << "call of RCTStatus::callJail with param chatId: " << chatId << " path: " << path << " params: " << params <<  " and callback id: " << callbackId;
-
+ 
     const char* result = Call(chatId.toUtf8().data(), path.toUtf8().data(), params.toUtf8().data());
     qDebug() << "RCTStatus::callJail callJail result: " << result;
     d->bridge->invokePromiseCallback(callbackId, QVariantList{result});
@@ -121,9 +129,6 @@ void RCTStatus::startNode(QString configString) {
 
     const char* result = StartNode(QString(QJsonDocument::fromVariant(generatedConfig).toJson(QJsonDocument::Compact)).toUtf8().data());
     qDebug() << "RCTStatus::startNode StartNode result: " << result;
-
-    d->bridge->eventDispatcher()->sendDeviceEvent("gethEvent", QVariantMap{{"jsonEvent", "{\"type\":\"node.started\"}"}});
-    d->bridge->eventDispatcher()->sendDeviceEvent("gethEvent", QVariantMap{{"jsonEvent", "{\"type\":\"node.ready\"}"}});
 }
 
 
@@ -235,23 +240,25 @@ void RCTStatus::sendWeb3Request(QString payload, double callbackId) {
     d->bridge->invokePromiseCallback(callbackId, QVariantList{result});
 }
 
-
 void RCTStatus::closeApplication() {
 }
 
-bool RCTStatus::JSCEnabled()
-{
+bool RCTStatus::JSCEnabled() {
     qDebug() << "call of RCTStatus::JSCEnabled";
     return false;
 }
 
-void RCTStatus::signalEvent(const char* signal)
-{
-    qDebug() << "call of RCTStatus::signalEvent ... signal: " << signal;
-
+void RCTStatus::jailSignalEventCallback(const char* signal) {
+    qDebug() << "call of RCTStatus::jailSignalEventCallback ... signal: " << signal;
+    RCTStatusPrivate::rctStatus->emitSignalEvent(signal);
 }
 
-void RCTStatus::jailEvent(QString chatId, QString data)
-{
-    qDebug() << "call of RCTStatus::jailEvent ... chatId: " << chatId << " data: " << data;
+void RCTStatus::emitSignalEvent(const char* signal) {
+    qDebug() << "call of RCTStatus::emitSignalEvent ... signal: " << signal;
+    Q_EMIT jailSignalEvent(signal);
+}
+
+void RCTStatus::onJailSignalEvent(const char* signal) {
+    qDebug() << "call of RCTStatus::onJailSignalEvent ... signal: " << signal;
+    RCTStatusPrivate::bridge->eventDispatcher()->sendDeviceEvent("gethEvent", QVariantMap{{"jsonEvent", signal}});
 }
