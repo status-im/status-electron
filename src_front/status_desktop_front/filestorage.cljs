@@ -40,7 +40,7 @@
 
 (defn store
   [atom backend]
-  (-get backend #((print "set atom " %) (reset! atom %)) #(-commit! backend @atom) )
+  (-get backend #(reset! atom %) #(-commit! backend @atom) )
   (doto atom
     (add-watch ::storage-watch
                #(-commit! backend %4))))

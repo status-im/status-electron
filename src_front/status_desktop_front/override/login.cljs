@@ -21,7 +21,10 @@
   ::login.events/change-account
   (fn [[address new-account?]]
     (storage/change-account address new-account?)
-    (re-frame/dispatch [:change-account-handler nil address new-account?])))
+    (add-watch (:chats @storage/account) :watcher (fn [key atom old-state new-state]
+                                            (re-frame/dispatch [:change-account-handler nil address new-account?])))
+
+    ))
 
 
 ;;; Handlers
