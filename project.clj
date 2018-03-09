@@ -129,7 +129,7 @@
                                                ;;:source-map "app/prod/js/test.js.map"
                                                :pretty-print true
                                                :output-wrapper true}}
-                      :dev-front-qt {:source-paths ["src_front" "env/dev/" "src_front_profile/dev_qt"  "../status-react/src"]
+                      :dev-front-qt {:source-paths ["src_front" "src_front_profile/dev_qt"  "../status-react/src"]
                                    :compiler {:output-to "target/desktop/not-used.js"
                                                :main     "status-desktop-front.init"
                                                ;; no optimize compile (dev)
