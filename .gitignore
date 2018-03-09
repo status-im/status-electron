@@ -1,4 +1,5 @@
 .DS_Store
+package-lock.json
 pom.xml
 *jar
 lib/

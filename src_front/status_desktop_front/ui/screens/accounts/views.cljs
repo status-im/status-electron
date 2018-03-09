@@ -27,7 +27,7 @@
   (letsubs [accounts [:get-accounts]]
     [react/view {:style (merge st/accounts-container {:align-items :center})}
      [react/view {:style {:flex 1 :width 290 :align-items :center :margin-top 160}}
-      [react/image {:source (js/require "./resources/logo.png")
+      [react/image {:source (js/require "./resources/images/logo.png")
                     :style  {:width 192 :height 61}}]
       [react/text {:style styles/account-title-text}
        "Sign in to your account"];(i18n/label :t/sign-in-to-status)]]
@@ -51,7 +51,7 @@
        [components/back-button #(re-frame/dispatch [:navigate-back])])
      [react/view {:style {:flex 1 :align-items :center :justify-content :center}}
       [react/view {:style {:width 290 :align-items :center}}
-       [react/image {:source (js/require "./resources/logo.png")
+       [react/image {:source (js/require "./resources/images/logo.png")
                      :style  {:width 192 :height 61 :resize-mode "stretch"}}]
        [react/view {:style st/account-title-conatiner}
         [react/text {:style styles/account-title-text}

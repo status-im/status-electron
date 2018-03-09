@@ -23,7 +23,7 @@
 
 (defn init []
   (mount-root)
-  ;(re-frame/dispatch-sync [:initialize-app])
+  (re-frame/dispatch-sync [:initialize-app])
   )
 
 (defn log [message]
