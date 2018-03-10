@@ -19,7 +19,8 @@
     "realm/react-native",
     "bignumber.js",
     "web3",
-    "react-native-status"
+    "react-native-status",
+    "random-bytes"
   ],
   "imageDirs": [
     "resources/images",
