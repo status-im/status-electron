@@ -133,7 +133,7 @@
                                                   text (.-text native-event)]
                                               (re-frame/dispatch [:set-chat-input-text text])))}]]
       [react/touchable-highlight {:on-press (fn []
-                                              (js/setTimeout #(do (.clear @inp-ref)(.focus @inp-ref)) 200)
+                                              ;(js/setTimeout #(do (.clear @inp-ref)(.focus @inp-ref)) 200)
                                               (re-frame/dispatch [:send-current-message]))}
        [react/view {:style {:margin-left     16 :width 30 :height 30 :border-radius 15 :background-color "#eef2f5" :align-items :center
                             :justify-content :center}}

@@ -25,9 +25,9 @@
 (re-frame/reg-fx
   :send-desktop-notification
   (fn [{:keys [content from sound]}]
-    (when-not (.hasFocus js/document)
+    (comment (when-not (.hasFocus js/document)
       ;(when sound (.play (get audio sound)))
-      (js/Notification. from (clj->js {:body content :silent true})))))
+      (js/Notification. from (clj->js {:body content :silent true}))))))
 
 ;;;; old events
 
