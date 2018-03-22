@@ -22,7 +22,8 @@
   (fn [[address new-account?]]
     (storage/change-account address new-account?)
     (add-watch (:chats @storage/account) :watcher (fn [key atom old-state new-state]
-                                            (re-frame/dispatch [:change-account-handler nil address new-account?])))
+                                                    (remove-watch (:chats @storage/account) :watcher)
+                                                    (re-frame/dispatch [:change-account-handler nil address new-account?])))
 
     ))
 

@@ -2,10 +2,12 @@
   (:require [reagent.core :as r]
               [status-desktop-front.core :as core]
               [figwheel.client :as fw]
-              [env.config :as conf]))
+              [env.config :as conf]
+              [re-frisk-remote.core :refer [enable-re-frisk-remote! pre-event-callback]]))
   
     (enable-console-print!)
-  
+
+
     (assert (exists? core/init) "Fatal Error - Your core.cljs file doesn't define an 'init' function!!! - Perhaps there was a compilation failure?")
     (assert (exists? core/app-root) "Fatal Error - Your core.cljs file doesn't define an 'app-root' function!!! - Perhaps there was a compilation failure?")
     
@@ -19,5 +21,6 @@
                 :websocket-url    (:desktop conf/figwheel-urls)
                 :heads-up-display false
                 :jsload-callback  #(swap! cnt inc)})
-    
-    (core/init)
+
+(enable-re-frisk-remote!)
+(core/init)
