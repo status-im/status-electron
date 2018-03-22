@@ -27,7 +27,7 @@
   (letsubs [accounts [:get-accounts]]
     [react/view {:style (merge st/accounts-container {:align-items :center})}
      [react/view {:style {:flex 1 :width 290 :align-items :center :margin-top 160}}
-      [react/image {:source (js/require "./resources/logo.png")
+      [react/image {:source (js/require "./resources/images/logo.png")
                     :style  {:width 192 :height 61}}]
       [react/text {:style styles/account-title-text}
        "Sign in to your account"];(i18n/label :t/sign-in-to-status)]]
@@ -51,7 +51,7 @@
        [components/back-button #(re-frame/dispatch [:navigate-back])])
      [react/view {:style {:flex 1 :align-items :center :justify-content :center}}
       [react/view {:style {:width 290 :align-items :center}}
-       [react/image {:source (js/require "./resources/logo.png")
+       [react/image {:source (js/require "./resources/images/logo.png")
                      :style  {:width 192 :height 61 :resize-mode "stretch"}}]
        [react/view {:style st/account-title-conatiner}
         [react/text {:style styles/account-title-text}
@@ -59,8 +59,7 @@
        [react/view
         [react/view {:style {:height 52 :width 290 :background-color :white
                              :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
-         [react/text-input {:value       (or profile-name "")
-                            :auto-focus  true
+         [react/text-input {:auto-focus  true
                             :style {:padding-horizontal 17 :flex 1}
                             :placeholder "Name"
                             :on-change   (fn [e]
@@ -69,8 +68,7 @@
                                              (re-frame/dispatch [:set-in [:accounts/create :name] text])))}]]
         [react/view {:style {:height 52 :width 290 :background-color :white
                              :opacity 0.2 :border-radius 8 :margin-top 22 :justify-content :center}}
-         [react/text-input {:value       (or password "")
-                            :style {:padding-horizontal 17 :flex 1 }
+         [react/text-input {:style {:padding-horizontal 17 :flex 1 }
                             :placeholder "Password"
                             :secure-text-entry true
                             :on-change   (fn [e]
@@ -79,8 +77,7 @@
                                              (re-frame/dispatch [:set-in [:accounts/create :password] text])))}]]
         [react/view {:style {:height 52 :width 290 :background-color :white
                              :opacity 0.2 :border-radius 8 :margin-top 8 :justify-content :center}}
-         [react/text-input {:value       (or password-confirm "")
-                            :placeholder "Repeat your password"
+         [react/text-input {:placeholder "Repeat your password"
                             :style {:padding-horizontal 17 :flex 1}
                             :on-key-press (fn [e]
                                             (let [native-event (.-nativeEvent e)

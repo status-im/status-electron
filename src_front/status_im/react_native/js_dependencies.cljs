@@ -28,7 +28,7 @@
 (def orientation            #js {})
 (def popup-menu             #js {})
 (def qr-code                #js {})
-(def random-bytes           #js {})
+(def random-bytes           (js/require "random-bytes"))
 (def react-native
   #js {:NativeModules      #js {}
        ;;TODO temporary using ios design for desktop, later desktop should be implemented (atm we have only ios or android)

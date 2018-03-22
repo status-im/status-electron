@@ -3,6 +3,8 @@
             [re-frame.core :as re-frame]
             [status-desktop-front.status-go :as status-go]
             [status-im.ui.screens.events :as events]
+            [status-im.js-dependencies :as dependencies]
+            [status-im.react-native.js-dependencies :as rn-dependencies]
             [status-im.commands.handlers.debug :as debug]))
 
 ;;;; FX
@@ -12,8 +14,27 @@
   (fn [config]
     (status-go/start-node config)))
 
+(defn gen-random-bytes [length cb]
+  (rn-dependencies/random-bytes length
+                (fn [& [err buf]]
+                  (if err
+                    (cb {:error err})
+                    (cb {:buffer buf})))))
+
+(re-frame/reg-fx
+  ::events/initialize-crypt-fx
+  (fn []
+    (gen-random-bytes
+      1024
+      (fn [{:keys [error buffer]}]
+        (if error
+          (print "Failed to generate random bytes to initialize sjcl crypto")
+          (->> (.toString buffer "hex")
+               (.toBits (.. dependencies/eccjs -sjcl -codec -hex))
+               (.addEntropy (.. dependencies/eccjs -sjcl -random))))))))
+
 (re-frame/reg-fx ::events/init-store #())
-(re-frame/reg-fx ::events/initialize-crypt-fx #())
+;(re-frame/reg-fx ::events/initialize-crypt-fx #())
 (re-frame/reg-fx ::events/status-module-initialized-fx #())
 (re-frame/reg-fx ::events/request-permissions-fx #())
 (re-frame/reg-fx ::events/testfairy-alert #())

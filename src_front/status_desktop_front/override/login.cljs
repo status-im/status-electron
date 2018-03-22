@@ -12,7 +12,8 @@
 (re-frame/reg-fx
   ::login.events/login
   (fn [[address password]]
-    (re-frame/dispatch [:login-handler (status-go/login address password) address])))
+    (re-frame/dispatch [:login-app (status-go/login address password (fn [data]
+                                             (re-frame/dispatch [:login-handler data address])))]) ))
 
 (re-frame/reg-fx ::login.events/clear-web-data #()) ;(status/clear-web-data))
 
@@ -20,7 +21,11 @@
   ::login.events/change-account
   (fn [[address new-account?]]
     (storage/change-account address new-account?)
-    (re-frame/dispatch [:change-account-handler nil address new-account?])))
+    (add-watch (:chats @storage/account) :watcher (fn [key atom old-state new-state]
+                                                    (remove-watch (:chats @storage/account) :watcher)
+                                                    (re-frame/dispatch [:change-account-handler nil address new-account?])))
+
+    ))
 
 
 ;;; Handlers

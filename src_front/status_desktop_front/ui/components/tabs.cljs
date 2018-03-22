@@ -29,7 +29,7 @@
        [react/view
         [icons/icon icon {:color (:color (tabs.styles/tab-icon active?))}]])
      [react/view
-      [react/text {:style (tabs.styles/tab-title active?)}
+      [react/text {:style (merge (tabs.styles/tab-title active?) {}) }
        title]]]))
 
 (def tabs-list-indexed (map-indexed vector (map #(update % :content tab-content) tabs-list-data)))
@@ -38,7 +38,7 @@
   [react/touchable-highlight {:style    (tabs.styles/tab active?)
                               :disabled active?
                               :on-press #(re-frame/dispatch [:set :left-view-id view-id])}
-   [react/view
+   [react/view {:style {:flex 1}}
     [content active?]]])
 
 (views/defview main-tabs []

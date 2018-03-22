@@ -1,4 +1,5 @@
 .DS_Store
+package-lock.json
 pom.xml
 *jar
 lib/
@@ -17,7 +18,7 @@ electron/
 app/dev/js/
 app/prod/js/
 index.desktop.js
-desktop/
+/desktop/*
 .idea
 figwheel_server.log
 app/prod-qt/

@@ -63,7 +63,7 @@
         (if platform/ios? :icons/dots-horizontal :icons/dots-vertical)
         n))
 
-(def default-viewbox {:width 24 :height 24})
+(def default-viewbox {:width 24 :height 24 background-color :blue})
 
 (defn icon
       ([name] (icon name nil))

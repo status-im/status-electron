@@ -107,19 +107,18 @@
 ;"Contact status not implemented"]])))
 
 (views/defview chat-text-input []
-  (views/letsubs [input-text [:chat :input-text]
-                  inp-ref (atom nil)]
+  (views/letsubs [inp-ref (atom nil)]
     [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
                          :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
      [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16 :flex 1 :margin-bottom 16}}
       [react/view {:style {:flex 1}}
-       [react/text-input {:default-value  (or input-text "")
-                          :placeholder    "Type a message..."
+       [react/text-input {:placeholder    "Type a message..."
                           :auto-focus     true
                           :multiline      true
                           :blur-on-submit true
                           :style          {:flex 1}
-                          :ref            #(reset! inp-ref %)
+                          :ref            (fn [text-input-ref]
+                                            (reset! inp-ref text-input-ref))
                           :on-key-press   (fn [e]
                                             (let [native-event (.-nativeEvent e)
                                                   key (.-key native-event)]
@@ -133,7 +132,7 @@
                                                   text (.-text native-event)]
                                               (re-frame/dispatch [:set-chat-input-text text])))}]]
       [react/touchable-highlight {:on-press (fn []
-                                              (js/setTimeout #(do (.clear @inp-ref)(.focus @inp-ref)) 200)
+                                              (js/setTimeout #(do (.clear @inp-ref)(.focus @inp-ref)) 400)
                                               (re-frame/dispatch [:send-current-message]))}
        [react/view {:style {:margin-left     16 :width 30 :height 30 :border-radius 15 :background-color "#eef2f5" :align-items :center
                             :justify-content :center}}
@@ -159,9 +158,10 @@
      [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
      [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
                           :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
-      [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16}}
+      [react/view {:style {:flex 1 :flex-direction :row :margin-horizontal 16 :margin-top 16}}
        [react/view {:style {:flex 1}}
         [react/text-input {:placeholder "Public key"
+                           :flex 1
                            :on-change   (fn [e]
                                           (let [native-event (.-nativeEvent e)
                                                 text (.-text native-event)]
@@ -177,10 +177,11 @@
      [react/view {:style {:height 1 :background-color "#e8ebec" :margin-horizontal 16}}]
      [react/view {:style {:height     90 :margin-horizontal 16 :margin-bottom 16 :background-color :white :border-radius 12
                           :box-shadow "0 0.5px 4.5px 0 rgba(0, 0, 0, 0.04)"}}
-      [react/view {:style {:flex-direction :row :margin-horizontal 16 :margin-top 16}}
+      [react/view {:style {:flex 1 :flex-direction :row :margin-horizontal 16 :margin-top 16}}
        [react/text "#"]
        [react/view {:style {:flex 1}}
         [react/text-input {:placeholder "topic"
+                           :flex 1
                            :on-change   (fn [e]
                                           (let [native-event (.-nativeEvent e)
                                                 text (.-text native-event)]

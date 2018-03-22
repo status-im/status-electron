@@ -22,8 +22,7 @@
          name]]
       [react/view {:style {:height 52 :width 290 :background-color :white
                            :opacity 0.2 :border-radius 8 :justify-content :center}}
-       [react/text-input {:value       (or password "")
-                          :placeholder "Password"
+       [react/text-input {:placeholder "Password"
                           :auto-focus true
                           :style {:padding-horizontal 17 :height 52}
                           :on-key-press (fn [e]

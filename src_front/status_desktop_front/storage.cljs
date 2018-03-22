@@ -2,12 +2,14 @@
   (:require                                                 ;[alandipert.storage-atom :refer [local-storage]]
             [status-im.data-store.messages :as data-store.messages]
             [status-im.utils.random :as random]
+            [status-desktop-front.filestorage :refer [file-storage]]
             [status-im.constants :as constants]))
 ;;;; ACCOUNTS
 
 ;; I would love to have something similar in status-react instead realm
 ;(def accounts (local-storage (atom []) :accounts))
-(def accounts (atom {}))
+(def accounts (file-storage (atom []) "/tmp/accounts"))
+;(def accounts (atom {}))
 (def account (atom {}))
 
 (defn save-account [account]
@@ -21,7 +23,15 @@
   ;       :contacts (local-storage (atom {}) (keyword (str address "contacts")))
   ;       :chats (local-storage (atom {}) (keyword (str address "chats")))
   ;       :messages (local-storage (atom {}) (keyword (str address "messages"))))
-      )
+  (swap! account assoc
+         :contacts (file-storage (atom {}) (str "/tmp/" address "contacts"))
+         :messages (file-storage (atom {}) (str "/tmp/" address "messages"))
+         :chats (file-storage (atom {}) (str "/tmp/" address "chats")))
+  ;(swap! account assoc
+  ;       :contacts ( atom {} )
+  ;       :chats  ( atom {} )
+  ;       :messages  ( atom {} ))
+  )
 
 
 ;;;; CONTACTS

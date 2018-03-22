@@ -1,34 +1,29 @@
-(ns status-desktop-front.status-go)
+(ns status-desktop-front.status-go
+  (:require [status-desktop-front.react-native-web :as react]))
 
 ;(def ipcRenderer (.-ipcRenderer (js/require "electron")))
 
-(defn call-web3 [payload]
-      (print "commented: call-web3")
-  ;(.sendSync ipcRenderer "CallRPC" payload)
-      )
+(def status
+  (when (exists? (.-NativeModules react/react-native-web))
+        (.-Status (.-NativeModules react/react-native-web))))
+
+(defn call-web3 [payload callback]
+    (.sendWeb3Request status payload (fn [data]
+                                  (callback data))))
 
 (defn start-node [config]
-      (print "commented: start-node")
-  ;(.log js/console (.sendSync ipcRenderer "StartNode" config))
-      )
+    (.log js/console (.startNode status config)))
 
-(defn create-account [password]
-  (.log js/console (str "CreateAccount " password))
-      (print "commented: create-account")
-  ;(let [res (.sendSync ipcRenderer "CreateAccount" password)]
-  ;  (.log js/console (str "CreateAccount result " res))
-  ;  res)
-      )
+(defn create-account [password callback]
+      (.createAccount status password (fn [data]
+                                          (callback data))))
 
-(defn login [address password]
+(defn login [address password callback]
   (.log js/console (str "Login " address " " password))
-  (print "commented: login")
-  ;(let [res (.sendSync ipcRenderer "Login" address password)]
-  ;  (.log js/console (str "Login result " res))
-  ;  res)
-      )
+  (.login status address password (fn [data]
+                                      (callback data))))
 
-(defn recover-account [passphrase password]
-      (print "commented: recover-account")
-  ;(.sendSync ipcRenderer "RecoverAccount" passphrase password)
-      )
+
+(defn recover-account [passphrase password callback]
+      (.recoverAccount status passphrase password (fn [data]
+                                          (callback data))))
