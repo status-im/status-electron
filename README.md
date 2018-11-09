@@ -1,9 +1,9 @@
-!!! THIS REPO IS OUTDATED AND NOT SUPPORTED 
-You can find Status Desktop souurces here https://github.com/status-im/react-native-desktop and here https://github.com/status-im/status-react
+# !!! THIS REPO IS OUTDATED AND NOT SUPPORTED 
+You can find Status Desktop sources here https://github.com/status-im/react-native-desktop and here https://github.com/status-im/status-react
 
 
 
-# status-electron
+status-electron
 
 Status ELECTRON (React Native Web and Electron)
 
