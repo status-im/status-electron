@@ -1,6 +1,11 @@
-# status-desktop
+!!! THIS REPO IS OUTDATED AND NOT SUPPORTED 
+You can find Status Desktop souurces here https://github.com/status-im/react-native-desktop and here https://github.com/status-im/status-react
 
-Status Desktop (React Native Web and Electron)
+
+
+# status-electron
+
+Status ELECTRON (React Native Web and Electron)
 
 Checkout `https://github.com/status-im/status-react/tree/feature/status-electron` branch into `status-react` folder 
 
